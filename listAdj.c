@@ -101,6 +101,10 @@ void preencheListaAdj(FILE* arqEntrada, listAdj* lAdj) {
     // }
 }
 
+int getNumVertices(listAdj* lAdj) {
+    return lAdj->numVertices;
+}
+
 void destroiListAdj(listAdj* lAdj) {
     if(lAdj == NULL) return;
 
