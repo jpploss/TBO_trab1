@@ -12,6 +12,8 @@ listAdj* criaListaAdj();
 /// @param lAdj lista a ser preenchida
 void preencheListaAdj(FILE* arqEntrada, listAdj* lAdj);
 
+/// @brief Libera toda a memória alocada para a lista 'lAdj'.
+/// @param lAdj lista a ser liberada
 void destroiListAdj(listAdj* lAdj);
 
 
