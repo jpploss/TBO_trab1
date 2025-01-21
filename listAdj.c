@@ -4,6 +4,7 @@
 #include "listAdj.h"
 
 typedef struct _vertice vertice;
+
 struct _vertice {
     char* nome;
     float peso;
