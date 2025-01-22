@@ -34,6 +34,24 @@ static int direito(int i) {
     return 2*i + 2;
 }
 
+static void corrigeSubida(Heap* heap, int pos) {
+    Vector* elementos = heap->elementos;
+    Vector* posicoes = heap->posicoes;
+
+    while(pos > 0) {
+        int paiPos = pai(pos);
+        HeapNode* pai = (HeapNode*) acessaElemento(elementos, paiPos);
+        HeapNode* atual = (HeapNode*) acessaElemento(elementos, pos);
+
+        if(pai->distancia <= atual->distancia) break; ; //ja esta certo
+
+        trocaElementos(elementos, pos, paiPos);
+        trocaElementos(posicoes, pai->vertice, atual->vertice);
+
+        pos = paiPos;
+    }
+}
+
 void insereHeap(Heap* heap, int idVertice, float distancia) {
     HeapNode* novoNode = (HeapNode*) malloc(sizeof(HeapNode));
     novoNode->vertice   = idVertice;
@@ -43,6 +61,5 @@ void insereHeap(Heap* heap, int idVertice, float distancia) {
     insereElemento(heap->elementos, (void*) novoNode);
     insereElemento(heap->posicoes, (void*) posInserido);
 
-    // Agora "corrigeSubida" para restabelecer a propriedade de min-heap
     corrigeSubida(heap, posInserido);
 }
