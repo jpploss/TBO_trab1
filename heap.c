@@ -1,15 +1,19 @@
 #include "heap.h"
 #include <stdlib.h>
 
+/*
+Ideia: em vez de remover da heap, podemos ir jogando para as posições finais do vetor 'elementos' e ir diminuindo o 
+tamanho útil desse vetor, daí no final teríamos um vetor com todos os vértices e suas distâncias mínimas para a origem.
+*/
+
 typedef struct {
-    int vertice; // ID do vértice ("node_0", "node_1",..)
+    int idVertice; // ID do vértice (na prática, corresponde à posição do vértice no vetor da lista de adjacência)
     float distancia;
 } HeapNode;
 
 struct _heap {
     Vector* elementos;
-    Vector* posicoes; // Vetor contendo as posições dos vértices na heap (heap->elementos)
-    // Exemplo: se heap->elementos = [node_0,  node_3, node_1, node_4, node_2], então heap->posicoes = [0, 2, 4, 1, 3]
+    Vector* posicoes; // vetor contendo as posições dos vértices na heap (ex.: vet[0] terá o índice do vértice de id 0 na heap)
 };
 
 Heap* criaHeap() {
@@ -46,7 +50,7 @@ static void corrigeSubida(Heap* heap, int pos) {
         if(pai->distancia <= atual->distancia) break; ; //ja esta certo
 
         trocaElementos(elementos, pos, paiPos);
-        trocaElementos(posicoes, pai->vertice, atual->vertice);
+        trocaElementos(posicoes, pai->idVertice, atual->idVertice);
 
         pos = paiPos;
     }
@@ -54,7 +58,7 @@ static void corrigeSubida(Heap* heap, int pos) {
 
 void insereHeap(Heap* heap, int idVertice, float distancia) {
     HeapNode* novoNode = (HeapNode*) malloc(sizeof(HeapNode));
-    novoNode->vertice   = idVertice;
+    novoNode->idVertice   = idVertice;
     novoNode->distancia = distancia;
 
     int posInserido = tamanhoVetor(heap->elementos);

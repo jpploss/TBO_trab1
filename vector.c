@@ -4,8 +4,7 @@
 
 /* Poderá ser usado para manipular a Heap e armazenar as distâncias dos vértices */
 
-struct _vector
-{
+struct _vector {
     int capacidade;
     int tamanho;
     void** elementos;
