@@ -3,29 +3,28 @@
 #include <string.h>
 #include "listAdj.h"
 
-typedef struct _adjacente adjacente;
+typedef struct _adjacente Adjacente;
 struct _adjacente {
-    int id; // id do vértice adjacente (corresponde à posição no vetor 'vertices' de 'listAdj')
+    int id; // id do vértice adjacente (corresponde à posição no vetor 'vertices' de 'ListAdj')
     float peso; // custo da conexão
-    adjacente* prox;
+    Adjacente* prox;
 };
 
-typedef struct _vertice vertice;
-
+typedef struct _vertice Vertice;
 struct _vertice {
     char nome[31];
     int numAdjacentes;
-    adjacente* adjacentes; // lista simplesmente encadeada sem sentinela contendo os adjcentes
+    Adjacente* adjacentes; // lista simplesmente encadeada sem sentinela contendo os adjcentes
 };
 
 struct _listAdj {
-    vertice** vertices;
+    Vertice** vertices;
     int idVerticeOrigem;
     int numVertices;
 };
 
-listAdj* criaListaAdj() {
-    listAdj* lAdj = malloc(sizeof(listAdj));
+ListAdj* criaListaAdj() {
+    ListAdj* lAdj = malloc(sizeof(ListAdj));
     lAdj->numVertices = 0;
     lAdj->idVerticeOrigem = -1;
     lAdj->vertices = NULL;
@@ -52,37 +51,36 @@ static int contaVertices(FILE* arqEntrada) {
     return numVertices;
 }
 
-void preencheListaAdj(FILE* arqEntrada, listAdj* lAdj) {
+void preencheListaAdj(FILE* arqEntrada, ListAdj* lAdj) {
     lAdj->numVertices = contaVertices(arqEntrada);
-    lAdj->vertices = malloc(sizeof(vertice*) * lAdj->numVertices);
+    lAdj->vertices = malloc(sizeof(Vertice*) * lAdj->numVertices);
 
     char nomeVerticeOrigem[31];
     fscanf(arqEntrada, "%[^\n]\n", nomeVerticeOrigem);
 
     for(int v = 0; v < lAdj->numVertices; v++) {
-        vertice* verticeAtual = malloc(sizeof(vertice));
+        Vertice* verticeAtual = malloc(sizeof(Vertice));
         lAdj->vertices[v] = verticeAtual;
         
         fscanf(arqEntrada, "%[^,], ", verticeAtual->nome); // lê nome do vértice atual
         verticeAtual->numAdjacentes = 0;
         verticeAtual->adjacentes = NULL; // a lista de vértices adjacentes começa vazia
 
-        if(strcmp(nomeVerticeOrigem, verticeAtual->nome) == 0) lAdj->idVerticeOrigem = v;
+        if(strcmp(nomeVerticeOrigem, verticeAtual->nome) == 0) lAdj->idVerticeOrigem = v; // verifica se vértice atual é o vértice de origem
 
         for(int adj = 0; adj < lAdj->numVertices; adj++) { // lê os vizinhos do vertice atual
             if(adj == v) continue;
 
             float peso = 0.0;
-            if(fscanf(arqEntrada, "%f", &peso) != 1) 
-            // caso não seja possível ler um float, presume-se que há a string "bomba", indicando ausência de conexão entre vértices
-                fscanf(arqEntrada, "%*[^,\n]"); // elimina a string "bomba"
-            
+
+            fscanf(arqEntrada, "%f", &peso);
+            fscanf(arqEntrada, "%*[^,\n]"); // elimina a string "bomba", se existir, ou algum catactere indesejado (como whitespaces)
             fscanf(arqEntrada, "%*c"); // elimina ',' ou '\n'
 
             if(peso == 0.0) continue;
             // como definido, caso o custo de acesso (peso) seja zero, assume-se que não há conexão entre os vértices
 
-            adjacente* verticeAdjacente = malloc(sizeof(adjacente));
+            Adjacente* verticeAdjacente = malloc(sizeof(Adjacente));
             verticeAdjacente->peso = peso;
             verticeAdjacente->id = adj;
 
@@ -94,25 +92,25 @@ void preencheListaAdj(FILE* arqEntrada, listAdj* lAdj) {
     }
 
 
-    // for(int i = 0; i < lAdj->numVertices; i++) {
-    //     printf("Adjcentes vértice %s:\n", lAdj->vertices[i]->nome);
-    //     for(adjacente* j = lAdj->vertices[i]->adjacentes; j != NULL; j = j->prox) 
-    //         printf("  id: %d, custo: %.02f\n", j->id, j->peso);
-    //     printf("\n");
-    // }
+    for(int i = 0; i < lAdj->numVertices; i++) {
+        printf("Adjcentes vértice %s:\n", lAdj->vertices[i]->nome);
+        for(Adjacente* j = lAdj->vertices[i]->adjacentes; j != NULL; j = j->prox) 
+            printf("  id: %d, custo: %.02f\n", j->id, j->peso);
+        printf("\n");
+    }
 }
 
-int getNumVertices(listAdj* lAdj) {
+int getNumVertices(ListAdj* lAdj) {
     return lAdj->numVertices;
 }
 
-void destroiListAdj(listAdj* lAdj) {
+void destroiListaAdj(ListAdj* lAdj) {
     if(lAdj == NULL) return;
 
     for(int v = 0; v < lAdj->numVertices; v++) {
-        adjacente* atual = lAdj->vertices[v]->adjacentes;
+        Adjacente* atual = lAdj->vertices[v]->adjacentes;
         while(atual != NULL) {
-            adjacente* temp = atual->prox;
+            Adjacente* temp = atual->prox;
             free(atual);
             atual = temp;
         }

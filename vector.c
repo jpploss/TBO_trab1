@@ -30,7 +30,7 @@ void insereElemento(Vector* v, void* elemento) {
     v->tamanho++;
 }
 
-void acessaElemento(Vector* v, int pos) {
+void* acessaElemento(Vector* v, int pos) {
     return v->elementos[pos];
 }
 
