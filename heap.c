@@ -12,14 +12,17 @@ typedef struct {
 } HeapNode;
 
 struct _heap {
-    Vector* elementos;
-    Vector* posicoes; // vetor contendo as posições dos vértices na heap (ex.: vet[0] terá o índice do vértice de id 0 na heap)
+    HeapNode** elementos;
+    int* posicoes; // vetor contendo as posições dos vértices na heap (ex.: vet[0] terá o índice do vértice de id 0 na heap)
+    int tamAtual;
 };
 
-Heap* criaHeap() {
+Heap* criaHeap(int numVertices) {
     Heap* heap = (Heap*) malloc (sizeof(Heap));
-    heap->elementos = criaVetor();
-    heap->posicoes = criaVetor();
+    heap->elementos = malloc(sizeof(HeapNode*)*numVertices);
+    heap->posicoes = malloc(sizeof(int)*numVertices);
+    heap->tamAtual = 0;
+
     return heap;
 }
 
@@ -38,22 +41,29 @@ static int direito(int i) {
     return 2*i + 2;
 }
 
-static void corrigeSubida(Heap* heap, int pos) {
-    Vector* elementos = heap->elementos;
-    Vector* posicoes = heap->posicoes;
+static int corrigeSubida(Heap* heap, int pos) {
+    HeapNode** elementos = heap->elementos;
+    int* posicoes = heap->posicoes;
 
     while(pos > 0) {
         int paiPos = pai(pos);
-        HeapNode* pai = (HeapNode*) acessaElemento(elementos, paiPos);
-        HeapNode* atual = (HeapNode*) acessaElemento(elementos, pos);
+        HeapNode* pai = elementos[paiPos];
+        HeapNode* atual = elementos[pos];
 
-        if(pai->distancia <= atual->distancia) break; ; //ja esta certo
+        if(pai->distancia <= atual->distancia) break; // já esta certo
 
-        trocaElementos(elementos, pos, paiPos);
-        trocaElementos(posicoes, pai->idVertice, atual->idVertice);
+        HeapNode* temp = elementos[pos];
+        elementos[pos] = elementos[paiPos];
+        elementos[paiPos] = temp;
+
+        int temp = posicoes[pai->idVertice];
+        posicoes[paiPos] = posicoes[atual->idVertice];
+        posicoes[atual->idVertice] = temp;
 
         pos = paiPos;
     }
+
+    return pos;
 }
 
 void insereHeap(Heap* heap, int idVertice, float distancia) {
@@ -61,9 +71,18 @@ void insereHeap(Heap* heap, int idVertice, float distancia) {
     novoNode->idVertice   = idVertice;
     novoNode->distancia = distancia;
 
-    int posInserido = tamanhoVetor(heap->elementos);
-    insereElemento(heap->elementos, (void*) novoNode);
-    insereElemento(heap->posicoes, (void*) posInserido);
+    int posInserido = heap->tamAtual;
+    heap->elementos[posInserido] = novoNode;
+    int posCorrigida = corrigeSubida(heap, posInserido);
+    heap->posicoes[idVertice] = posCorrigida;
+}
 
-    corrigeSubida(heap, posInserido);
+void destroiHeap(Heap* heap) {
+    if(heap == NULL) return;
+
+    if(heap->posicoes != NULL) free(heap->posicoes);
+    for(int i = 0; i < heap->tamAtual; i++) 
+        free(heap->elementos[i]);
+    free(heap->elementos);
+    free(heap);
 }

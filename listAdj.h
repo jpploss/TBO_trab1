@@ -5,7 +5,7 @@
 typedef struct _listAdj ListAdj;
 
 /// @brief Cria uma lista de adjacências vazia.
-/// @return Lista de adjacência vazia.
+/// @return Ponteiro para a estrutura da lista de adjacências alocada dinamicamente.
 ListAdj* criaListaAdj();
 
 /// @brief Preenche uma lista de adjacências vazia a partir de um arquivo de entrada, que deve estar no padrão estabelecido.
