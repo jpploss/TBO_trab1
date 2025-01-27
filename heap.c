@@ -120,15 +120,15 @@ int extraiMenorElemento(Heap* heap) {
   HeapNode* raiz = heap->elementos[0];
   int distRaizRemovida = raiz->distancia;
 
+  // Diminui tamanho da heap
+  heap->tamAtual--;
+
   // Substitui a raiz pelo ultimo elemento
-  HeapNode* ultimo = heap->elementos[heap->tamAtual - 1];
+  HeapNode* ultimo = heap->elementos[heap->tamAtual];
   heap->elementos[0] = ultimo;
 
   // Atualiza a posição do último elemento no vetor de posicoes
   heap->posicoes[ultimo->idVertice] = 0;
-
-  // Diminui tamanho da heap
-  heap->tamAtual--;
 
   // Corrige a descida
   corrigeDescida(heap, 0);
