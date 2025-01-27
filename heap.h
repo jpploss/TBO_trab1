@@ -19,7 +19,7 @@ void insereHeap(Heap* heap, int idVertice, float distancia);  //-1 se não tiver
 
 /// @brief Extrai o menor elemento da heap.
 /// @param heap heap onde será extraído o menor elemento
-/// @return  retorna o id do vértice com a menor distância
+/// @return Retorna o id do vértice com a menor distância
 int extraiMenorElemento(Heap* heap);
 
 /// @brief Libera toda a memória alocada para 'heap'.
