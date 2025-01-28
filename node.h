@@ -20,7 +20,7 @@ int getNodeId(Node* n);
 /// @return Peso do nó
 float getNodePeso(Node* n);
 
-/// @brief Cria um nó com mesmo id e peso do nó passa como argumento.
+/// @brief Cria um nó com mesmo id e peso do nó passado como argumento.
 /// @param n nó a ser copiado
 /// @return Ponteiro para a estrura do nó cópia alocada dinamicamente.
 Node* copiaNode(Node* n);
