@@ -4,9 +4,9 @@
 #include "listAdj.h"
 
 typedef struct _adjacente Adjacente;
+
 struct _adjacente {
-    int id; // id do vértice adjacente (corresponde à posição no vetor 'vertices' de 'ListAdj')
-    float peso; // custo da conexão
+    Node* node;
     Adjacente* prox;
 };
 
@@ -81,8 +81,7 @@ void preencheListaAdj(FILE* arqEntrada, ListAdj* lAdj) {
             // como definido, caso o custo de acesso (peso) seja zero, assume-se que não há conexão entre os vértices
 
             Adjacente* verticeAdjacente = malloc(sizeof(Adjacente));
-            verticeAdjacente->peso = peso;
-            verticeAdjacente->id = adj;
+            verticeAdjacente->node = criaNode(adj, peso);
 
             // insere 'verticeAdjacente' no início da lista de adjacência de 'verticeAtual'
             verticeAdjacente->prox = verticeAtual->adjacentes;
@@ -95,13 +94,28 @@ void preencheListaAdj(FILE* arqEntrada, ListAdj* lAdj) {
     for(int i = 0; i < lAdj->numVertices; i++) {
         printf("Adjcentes vértice %s:\n", lAdj->vertices[i]->nome);
         for(Adjacente* j = lAdj->vertices[i]->adjacentes; j != NULL; j = j->prox) 
-            printf("  id: %d, custo: %.02f\n", j->id, j->peso);
+            printf("  id: %d, custo: %.02f\n", getNodeId(j->node), getNodePeso(j->node));
         printf("\n");
     }
 }
 
 int getNumVertices(ListAdj* lAdj) {
     return lAdj->numVertices;
+}
+
+Node** getAdjacentes(ListAdj* lAdj, int id) {
+    Vertice* v = lAdj->vertices[id];
+    Node** adjcentes = malloc(sizeof(Node*) * v->numAdjacentes);
+
+    int count = 0;
+    for(Adjacente* j = v->adjacentes; j != NULL; j = j->prox) 
+        adjcentes[count++] = copiaNode(j->node);
+
+    return adjcentes;
+}
+
+int getNumAdjacentes(ListAdj* lAdj, int id) {
+    return lAdj->vertices[id]->numAdjacentes;
 }
 
 void destroiListaAdj(ListAdj* lAdj) {
@@ -111,6 +125,7 @@ void destroiListaAdj(ListAdj* lAdj) {
         Adjacente* atual = lAdj->vertices[v]->adjacentes;
         while(atual != NULL) {
             Adjacente* temp = atual->prox;
+            destroiNode(atual->node);
             free(atual);
             atual = temp;
         }

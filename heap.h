@@ -1,7 +1,7 @@
 #ifndef HEAP_H
 #define HEAP_H
 
-// #include "vector.h"
+#include "node.h"
 
 /// @brief TAD responsável pela criação, manutenção e destruição de uma min heap.
 typedef struct _heap Heap;
