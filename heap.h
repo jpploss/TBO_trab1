@@ -28,11 +28,12 @@ int pesoInfinito(Node* n);
 /// @param pai ponteiro para o pai do vértice de id igual a 'idVertice'
 void insereHeap(Heap* heap, int idVertice, float distancia, Node* pai);
 
-/// @brief Atualiza o peso do nó de entrada mantendo a ordem heap.
+/// @brief Atualiza o peso e o pai do nó cujo id foi passado como argumento ('idFilho') mantendo a ordem heap.
 /// @param heap heap válida contendo o nó
-/// @param n nó válido a ser atualizado
+/// @param idFilho id do nó válido a ser atualizado
+/// @param pai novo nó pai
 /// @param novaDistancia nova distância do nó de entrada
-void atualizaDistancia(Heap* heap, Node* n, float novaDistancia);
+void atualizaDistanciaEPai(Heap* heap, int idFilho, Node* pai, float novaDistancia);
 
 /// @brief Extrai o menor elemento da heap.
 /// @param heap heap onde será extraído o menor elemento
@@ -40,6 +41,12 @@ void atualizaDistancia(Heap* heap, Node* n, float novaDistancia);
 ///
 /// Obs.: como o nó foi removido, é necessário destruí-lo após o uso.
 Node* extraiMenorElemento(Heap* heap);
+
+/// @brief Retorna o peso atual do nó na heap. 
+/// @param heap heap válida contendo o nó
+/// @param id id do nó
+/// @return Float correspondendo ao peso atual do nó na heap.
+float getPesoHeap(Heap* heap, int id);
 
 /// @brief Retorna o tamanho atual da heap.
 /// @param heap heap válida

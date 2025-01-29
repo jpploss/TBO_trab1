@@ -9,7 +9,7 @@
 int main() {
     
     ListAdj* grafo = criaListaAdj();
-    FILE* arqEntrada = fopen("./casos_teste_v3/caso_teste_muito_pequeno_2.txt", "r");
+    FILE* arqEntrada = fopen("./casos_teste_v3/caso_teste_muito_pequeno_1.txt", "r");
     preencheListaAdj(arqEntrada, grafo);
     fclose(arqEntrada);
 

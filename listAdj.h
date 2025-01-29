@@ -20,10 +20,10 @@ void preencheListaAdj(FILE* arqEntrada, ListAdj* lAdj);
 
 /// @brief Retorna o peso de uma aresta.
 /// @param lAdj grafo de entrada
-/// @param pai nó de origem
-/// @param filho nó de destino
+/// @param idPai id do nó de origem
+/// @param idFilho id do nó de destino
 /// @return Float correspondendo ao peso da aresta de pai para filho. Se a aresta não for encontrada será retornado 0.
-float getPesoAresta(ListAdj* lAdj, Node* pai, Node* filho);
+float getPesoAresta(ListAdj* lAdj, int idPai, int idFilho);
 
 /// @brief Retorna o número de vértices do grafo representado por 'lAdj'.
 /// @param lAdj grafo de entrada

@@ -2,19 +2,22 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static void relax(Node* pai, Node* filho, ListAdj* grafo, Heap* heap) {
+static void relax(Node* pai, int idFilho, ListAdj* grafo, Heap* heap) {
     float pesoPai = getNodePeso(pai);
-    float pesoFilho = getNodePeso(filho);
-    float novoPesoFilho = pesoPai + getPesoAresta(grafo, pai, filho);
+    float pesoFilhoHeap = getPesoHeap(heap, idFilho);
+    float novoPesoFilho = pesoPai + getPesoAresta(grafo, getNodeId(pai), idFilho);
 
-    if(pesoInfinito(filho) || pesoFilho > novoPesoFilho) {
-        printf("Tinha que relaxa nó %d\n", getNodeId(filho));
-        setNodePai(filho, pai);
-        atualizaDistancia(heap, filho, novoPesoFilho);
+    if(pesoFilhoHeap == INFINITO || pesoFilhoHeap > novoPesoFilho) {
+        atualizaDistanciaEPai(heap, idFilho, pai, novoPesoFilho);
     }
 }
 
+static int visitado(Node** caminhosMinimos, int id) {
+    return caminhosMinimos[id] != NULL;
+}
+
 Node** dijkstra(ListAdj* grafo) {
+    
     // inicializa a heap
     int numVertices = getNumVertices(grafo);
     Heap* heap = criaHeap(numVertices);
@@ -24,18 +27,17 @@ Node** dijkstra(ListAdj* grafo) {
         else insereHeap(heap, i, INFINITO, NULL); // -1 será utilizado como infinito
     }
 
-
-    Node** caminhosMinimos = malloc(numVertices*sizeof(Node*));
-    int nosVisitados = 0;
+    Node** caminhosMinimos = calloc(numVertices, sizeof(Node*));
     while(getTamAtualHeap(heap) > 0) {
         Node* min = extraiMenorElemento(heap);
-        caminhosMinimos[nosVisitados] = min;
-        nosVisitados++;
+        int idMin = getNodeId(min);
+        caminhosMinimos[idMin] = min;
 
         int numAdjacentes = getNumAdjacentes(grafo, min);
         Node** adjacentesMin = getAdjacentes(grafo, min);
         for(int v = 0; v < numAdjacentes; v++) {
-            relax(min, adjacentesMin[v], grafo, heap);
+            if(!visitado(caminhosMinimos, getNodeId(adjacentesMin[v])))
+                relax(min, getNodeId(adjacentesMin[v]), grafo, heap);
         }
     }
 

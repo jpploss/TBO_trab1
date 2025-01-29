@@ -96,9 +96,8 @@ void preencheListaAdj(FILE* arqEntrada, ListAdj* lAdj) {
     // }
 }
 
-float getPesoAresta(ListAdj* lAdj, Node* pai, Node* filho) {
-    int idPai = getNodeId(pai), idFilho = getNodeId(filho);
-
+float getPesoAresta(ListAdj* lAdj, int idPai, int idFilho) {
+    
     Adjacente* adjPai = lAdj->vertices[idPai]->adjacentes;
     for(Adjacente* adj = adjPai; adj != NULL; adj = adj->prox) {
         Node* temp = adj->node;

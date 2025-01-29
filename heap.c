@@ -86,17 +86,18 @@ static int corrigeDescida(Heap* heap, int posicao) {
     elementos[menor] = temp;
 
     // Atualiza vetor de posicoes
-    posicoes[getNodeId(elementos[posicao])] = posicao;
-    posicoes[getNodeId(elementos[menor])] = menor;
+    posicoes[getNodeId(elementos[posicao])] = menor;
+    posicoes[getNodeId(elementos[menor])] = posicao;
 
     posicao = menor;
   }
   return posicao;
 }
 
-void atualizaDistancia(Heap* heap, Node* n, float novaDistancia) {
-  int posFilho = heap->posicoes[getNodeId(n)];
-  setNodePeso(n, novaDistancia);
+void atualizaDistanciaEPai(Heap* heap, int idFilho, Node* pai, float novaDistancia) {
+  int posFilho = heap->posicoes[idFilho];
+  setNodePeso(heap->elementos[posFilho], novaDistancia);
+  setNodePai(heap->elementos[posFilho], pai);
 
   corrigeDescida(heap, posFilho);
   corrigeSubida(heap, posFilho);
@@ -110,11 +111,16 @@ void insereHeap(Heap* heap, int idVertice, float distancia, Node* pai) {
   heap->posicoes[idVertice] = posInserido;
   heap->tamAtual++;
 
-  if(pesoInfinito(novoNode)) corrigeSubida(heap, posInserido);
+  if(!pesoInfinito(novoNode)) corrigeSubida(heap, posInserido);
 }
 
 int getTamAtualHeap(Heap* heap) {
   return heap->tamAtual;
+}
+
+float getPesoHeap(Heap* heap, int id) {
+  int pos = heap->posicoes[id];
+  return getNodePeso(heap->elementos[pos]);
 }
 
 Node* extraiMenorElemento(Heap* heap) {
