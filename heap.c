@@ -1,12 +1,5 @@
 #include "heap.h"
 
-#include <stdlib.h>
-
-/*
-Ideia: em vez de remover da heap, podemos ir jogando para as posições finais do vetor 'elementos' e ir diminuindo o
-tamanho útil desse vetor, daí no final teríamos um vetor com todos os vértices e suas distâncias mínimas para a origem.
-*/
-
 struct _heap {
   Node** elementos;
   int* posicoes;  // vetor contendo as posições dos vértices na heap (ex.: vet[0] terá o índice do vértice de id 0 na heap)
@@ -18,6 +11,7 @@ Heap* criaHeap(int numVertices) {
   heap->elementos = malloc(sizeof(Node*) * numVertices);
   heap->posicoes = malloc(sizeof(int) * numVertices);
   heap->tamAtual = 0;
+  
   return heap;
 }
 
@@ -36,6 +30,10 @@ static int direito(int i) {
   return 2 * i + 2;
 }
 
+int pesoInfinito(Node* n) {
+  return getNodePeso(n) == INFINITO;
+}
+
 static int corrigeSubida(Heap* heap, int pos) {
   Node** elementos = heap->elementos;
   int* posicoes = heap->posicoes;
@@ -45,7 +43,7 @@ static int corrigeSubida(Heap* heap, int pos) {
     Node* pai = elementos[paiPos];
     Node* atual = elementos[pos];
 
-    if (getNodePeso(pai) <= getNodePeso(atual)) break;  // já esta certo
+    if (!pesoInfinito(pai) && getNodePeso(pai) <= getNodePeso(atual)) break;  // já esta certo
 
     Node* tempNode = elementos[pos];
     elementos[pos] = elementos[paiPos];
@@ -61,7 +59,7 @@ static int corrigeSubida(Heap* heap, int pos) {
   return pos;
 }
 
-static void corrigeDescida(Heap* heap, int posicao) {
+static int corrigeDescida(Heap* heap, int posicao) {
   Node** elementos = heap->elementos;
   int* posicoes = heap->posicoes;
   int tamAtual = heap->tamAtual;
@@ -72,11 +70,11 @@ static void corrigeDescida(Heap* heap, int posicao) {
     int menor = posicao;
 
     // Verifica se o filho esquerdo é menor
-    if (esq < tamAtual && getNodePeso(elementos[esq]) < getNodePeso(elementos[menor]))
+    if (esq < tamAtual && !pesoInfinito(elementos[esq]) && getNodePeso(elementos[esq]) < getNodePeso(elementos[menor]))
       menor = esq;
 
     // Verifica se o filho direito é menor
-    if (dir < tamAtual && getNodePeso(elementos[dir]) < getNodePeso(elementos[menor]))
+    if (dir < tamAtual && !pesoInfinito(elementos[dir]) > 0 && getNodePeso(elementos[dir]) < getNodePeso(elementos[menor]))
       menor = dir;
 
     // O menor é o próprio elemento, sai do loop
@@ -93,25 +91,36 @@ static void corrigeDescida(Heap* heap, int posicao) {
 
     posicao = menor;
   }
+  return posicao;
 }
 
-void insereHeap(Heap* heap, int idVertice, float distancia) {
-  Node* novoNode = criaNode(idVertice, distancia);
+void atualizaDistancia(Heap* heap, Node* n, float novaDistancia) {
+  int posFilho = heap->posicoes[getNodeId(n)];
+  setNodePeso(n, novaDistancia);
+
+  corrigeDescida(heap, posFilho);
+  corrigeSubida(heap, posFilho);
+}
+
+void insereHeap(Heap* heap, int idVertice, float distancia, Node* pai) {
+  Node* novoNode = criaNode(idVertice, distancia, pai);
 
   int posInserido = heap->tamAtual;
   heap->elementos[posInserido] = novoNode;
-
-  int posCorrigida = corrigeSubida(heap, posInserido);
-  heap->posicoes[idVertice] = posCorrigida;
-
+  heap->posicoes[idVertice] = posInserido;
   heap->tamAtual++;
+
+  if(pesoInfinito(novoNode)) corrigeSubida(heap, posInserido);
 }
 
-int extraiMenorElemento(Heap* heap) {
-  if (!heap || heap->tamAtual == 0) return -1;
+int getTamAtualHeap(Heap* heap) {
+  return heap->tamAtual;
+}
+
+Node* extraiMenorElemento(Heap* heap) {
+  if (!heap || heap->tamAtual == 0) return NULL;
 
   Node* raiz = heap->elementos[0];
-  int distRaizRemovida = getNodePeso(raiz);
 
   // Diminui tamanho da heap
   heap->tamAtual--;
@@ -126,8 +135,7 @@ int extraiMenorElemento(Heap* heap) {
   // Corrige a descida
   corrigeDescida(heap, 0);
 
-  free(raiz);
-  return distRaizRemovida;
+  return raiz;
 }
 
 void destroiHeap(Heap* heap) {
