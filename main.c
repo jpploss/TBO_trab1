@@ -18,26 +18,30 @@ int main() {
     
     ListAdj* grafo = criaListaAdj();
     printf("Lendo arquivo e construindo grafo...\n");
-    FILE* arqEntrada = fopen("./casos_teste_v3/caso_teste_pequeno_1.txt", "r");
+    FILE* arqEntrada = fopen("./casos_teste_v3/caso_teste_medio_1.txt", "r");
     preencheListaAdj(arqEntrada, grafo);
     fclose(arqEntrada);
     printf("Arquivo lido e grafo construído!\n");
 
     printf("\nRealizando Dijkstra para encontrar os caminhos mínimos...\n");
+    Node** caminhosMinimos = dijkstra(grafo);
+    printf("Dijkstra feito e caminhos mínimos encontrados!\n");
 
     FILE* arqSaida = fopen("./resultado.txt", "w");
-    Node** caminhosMinimos = dijkstra(grafo);
     int numVertices = getNumVertices(grafo);
     qsort(caminhosMinimos, numVertices, sizeof(Node*), comparaNode);
     for(int i = 0; i < numVertices; i++) {
         Node* noAtual = caminhosMinimos[i];
-        fprintf(arqSaida, "SHORTEST PATH TO %s: ", getNomeVertice(grafo, getNodeId(noAtual)));
+        char* nomeNoAtual = getNomeVertice(grafo, getNodeId(noAtual));
+        fprintf(arqSaida, "SHORTEST PATH TO %s: ", nomeNoAtual);
 
-        if(getNodePai(noAtual) == NULL)  { 
-            fprintf(arqSaida, "%s <- %s (Distance: 0.00)\n", 
-                                        getNomeVertice(grafo, getNodeId(noAtual)), 
-                                        getNomeVertice(grafo, getNodeId(noAtual)));
+        if(pesoInfinito(noAtual)) { // sem conexão
+            fprintf(arqSaida, "-\n");
+            continue;
+        }
 
+        if(getNodePai(noAtual) == NULL)  { // nó raíz (origem)
+            fprintf(arqSaida, "%s <- %s (Distance: 0.00)\n", nomeNoAtual, nomeNoAtual);
             continue;
         }
 
@@ -49,7 +53,6 @@ int main() {
         fprintf(arqSaida, " (Distance: %.02f)\n", getNodePeso(noAtual));
     }
     fclose(arqSaida);
-    printf("Dijkstra feito e caminhos mínimos encontrados!\n");
 
 
     // liberação de memória
