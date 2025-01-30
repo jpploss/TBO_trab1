@@ -72,20 +72,21 @@ static int corrigeDescida(Heap* heap, int posicao) {
       menor = esq;
 
     // Verifica se o filho direito é menor
-    if (dir < tamAtual && !pesoInfinito(elementos[dir]) > 0 && getNodePeso(elementos[dir]) < getNodePeso(elementos[menor]))
+    if (dir < tamAtual && !pesoInfinito(elementos[dir]) && getNodePeso(elementos[dir]) < getNodePeso(elementos[menor]))
       menor = dir;
 
     // O menor é o próprio elemento, sai do loop
     if (menor == posicao) break;
 
     // Troca o elemento atual com o menor
-    Node* temp = elementos[posicao];
-    elementos[posicao] = elementos[menor];
-    elementos[menor] = temp;
+    Node* nodePosicao = elementos[posicao];
+    Node* nodeMenor = elementos[menor];
+    elementos[posicao] = nodeMenor;
+    elementos[menor] = nodePosicao;
 
     // Atualiza vetor de posicoes
-    posicoes[getNodeId(elementos[posicao])] = menor;
-    posicoes[getNodeId(elementos[menor])] = posicao;
+    posicoes[getNodeId(nodePosicao)] = menor;
+    posicoes[getNodeId(nodeMenor)] = posicao;
 
     posicao = menor;
   }
@@ -123,7 +124,6 @@ float getPesoHeap(Heap* heap, int id) {
 
 Node* extraiMenorElemento(Heap* heap) {
   if (!heap || heap->tamAtual == 0) return NULL;
-
   Node* raiz = heap->elementos[0];
 
   // Diminui tamanho da heap
