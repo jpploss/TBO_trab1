@@ -2,5 +2,5 @@ comp:
 	gcc *.c -o prog
 run:
 	./prog
-runV:
+runv:
 	valgrind --leak-check=full ./prog

@@ -32,7 +32,6 @@ Node** dijkstra(ListAdj* grafo) {
         Node* min = extraiMenorElemento(heap);
         int idMin = getNodeId(min);
         caminhosMinimos[idMin] = min;
-
         int numAdjacentes = getNumAdjacentes(grafo, min);
         int* idAdjacentesMin = getAdjacentes(grafo, min);
         for(int v = 0; v < numAdjacentes; v++) {

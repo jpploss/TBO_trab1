@@ -48,6 +48,14 @@ int getNumAdjacentes(ListAdj* lAdj, Node* vertice);
 /// @return Inteiro correspondendo ao id do vértice de origem do grafo.
 int getIdOrigem(ListAdj* lAdj);
 
+/// @brief Retorna o nome do vértice cujo id é fornecido como argumento.
+/// @param lAdj grafo que contém o nó
+/// @param id id do nó
+/// @return Ponteiro para o vetor contendo o nome do vértice.
+///
+/// Obs.: o ponteiro corresponde ao endereço original, não é uma cópia.
+char* getNomeVertice(ListAdj* lAdj, int id);
+
 /// @brief Libera toda a memória alocada para a lista 'lAdj'.
 /// @param lAdj lista a ser liberada
 void destroiListaAdj(ListAdj* lAdj);

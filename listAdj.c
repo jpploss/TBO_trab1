@@ -129,6 +129,10 @@ int getIdOrigem(ListAdj* lAdj) {
     return lAdj->idVerticeOrigem;
 }
 
+char* getNomeVertice(ListAdj* lAdj, int id) {
+    return lAdj->vertices[id]->nome;
+}
+
 void destroiListaAdj(ListAdj* lAdj) {
     if(lAdj == NULL) return;
 
