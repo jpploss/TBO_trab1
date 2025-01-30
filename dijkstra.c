@@ -27,19 +27,20 @@ Node** dijkstra(ListAdj* grafo) {
         else insereHeap(heap, i, INFINITO, NULL); // -1 será utilizado como infinito
     }
 
-    Node** caminhosMinimos = calloc(numVertices, sizeof(Node*));
+    Node** caminhosMinimos = calloc(numVertices, sizeof(Node*)); // as posições contendo NULL é porque o nó ainda não foi visitado
     while(getTamAtualHeap(heap) > 0) {
         Node* min = extraiMenorElemento(heap);
         int idMin = getNodeId(min);
         caminhosMinimos[idMin] = min;
 
         int numAdjacentes = getNumAdjacentes(grafo, min);
-        Node** adjacentesMin = getAdjacentes(grafo, min);
+        int* idAdjacentesMin = getAdjacentes(grafo, min);
         for(int v = 0; v < numAdjacentes; v++) {
-            if(!visitado(caminhosMinimos, getNodeId(adjacentesMin[v])))
-                relax(min, getNodeId(adjacentesMin[v]), grafo, heap);
+            if(!visitado(caminhosMinimos, idAdjacentesMin[v]))
+                relax(min, idAdjacentesMin[v], grafo, heap);
         }
+        free(idAdjacentesMin);
     }
-
+    destroiHeap(heap);
     return caminhosMinimos;
 }

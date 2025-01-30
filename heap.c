@@ -45,13 +45,11 @@ static int corrigeSubida(Heap* heap, int pos) {
 
     if (!pesoInfinito(pai) && getNodePeso(pai) <= getNodePeso(atual)) break;  // já esta certo
 
-    Node* tempNode = elementos[pos];
-    elementos[pos] = elementos[paiPos];
-    elementos[paiPos] = tempNode;
+    elementos[pos] = pai;
+    elementos[paiPos] = atual;
 
-    int temp = posicoes[getNodeId(pai)];
-    posicoes[paiPos] = posicoes[getNodeId(atual)];
-    posicoes[getNodeId(atual)] = temp;
+    posicoes[getNodeId(pai)] = pos;
+    posicoes[getNodeId(atual)] = paiPos;
 
     pos = paiPos;
   }

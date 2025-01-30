@@ -110,15 +110,15 @@ int getNumVertices(ListAdj* lAdj) {
     return lAdj->numVertices;
 }
 
-Node** getAdjacentes(ListAdj* lAdj, Node* vertice) {
+int* getAdjacentes(ListAdj* lAdj, Node* vertice) {
     Vertice* v = lAdj->vertices[getNodeId(vertice)];
-    Node** adjcentes = malloc(sizeof(Node*) * v->numAdjacentes);
+    int* idAdjcentes = malloc(sizeof(int) * v->numAdjacentes);
 
     int count = 0;
     for(Adjacente* j = v->adjacentes; j != NULL; j = j->prox) 
-        adjcentes[count++] = copiaNode(j->node);
+        idAdjcentes[count++] = getNodeId(j->node);
 
-    return adjcentes;
+    return idAdjcentes;
 }
 
 int getNumAdjacentes(ListAdj* lAdj, Node* vertice) {

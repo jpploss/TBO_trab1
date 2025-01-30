@@ -30,11 +30,12 @@ float getPesoAresta(ListAdj* lAdj, int idPai, int idFilho);
 /// @return Inteiro correspondendo ao número de vértices de 'lAdj'.
 int getNumVertices(ListAdj* lAdj);
 
-/// @brief Retorna um vetor contendo os nós adjacentes ao nó de entrada.
+/// @brief Retorna um vetor contendo os ids dos nós adjacentes ao nó de entrada.
 /// @param lAdj grafo que contém o nó
 /// @param vertice nó válido
-/// @return Vetor alocado dinamicamente contendo os nós adjacentes (cada nó do vetor são cópias alocadas dinamicamente).
-Node** getAdjacentes(ListAdj* lAdj, Node* vertice);
+/// @return Vetor de inteiros alocado dinamicamente contendo os ids dos nós adjacentes (a liberação da memória 
+/// é responsabilidade do cliente).
+int* getAdjacentes(ListAdj* lAdj, Node* vertice);
 
 /// @brief Retorna a quantidade de adjacentes ao nó de entrada.
 /// @param lAdj grafo que contém o nó
