@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "listAdj.h"
 #include "heap.h"
 #include "node.h"
@@ -16,9 +17,11 @@ int comparaNode(const void* n1, const void* n2) {
 
 int main() {
     
-    ListAdj* grafo = criaListaAdj();
+    clock_t inicio = clock();
+    
     printf("Lendo arquivo e construindo grafo...\n");
-    FILE* arqEntrada = fopen("./casos_teste_v3/caso_teste_pequeno_4.txt", "r");
+    ListAdj* grafo = criaListaAdj();
+    FILE* arqEntrada = fopen("./casos_teste_v3/caso_teste_medio_4.txt", "r");
     preencheListaAdj(arqEntrada, grafo);
     fclose(arqEntrada);
     printf("Arquivo lido e grafo construído!\n");
@@ -27,6 +30,7 @@ int main() {
     Node** caminhosMinimos = dijkstra(grafo);
     printf("Dijkstra feito e caminhos mínimos encontrados!\n");
 
+    printf("\nSalvando caminhos em arquivo.\n");
     FILE* arqSaida = fopen("./resultado.txt", "w");
     int numVertices = getNumVertices(grafo);
     qsort(caminhosMinimos, numVertices, sizeof(Node*), comparaNode);
@@ -59,6 +63,10 @@ int main() {
     for(int i = 0; i < getNumVertices(grafo); i++) destroiNode(caminhosMinimos[i]);
     free(caminhosMinimos);
     destroiListaAdj(grafo);
+
+    clock_t fim = clock();
+    double tempoTotal = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+    printf("\nTempo decorrido %f seconds\n", tempoTotal);
 
     return 0;
 }
