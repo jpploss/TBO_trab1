@@ -2,16 +2,11 @@
 
 typedef struct _adjacente Adjacente;
 
-struct _adjacente {
-    Node* node;
-    Adjacente* prox;
-};
-
 typedef struct _vertice Vertice;
 struct _vertice {
     char nome[31];
     int numAdjacentes;
-    Adjacente* adjacentes; // lista simplesmente encadeada sem sentinela contendo os adjcentes
+    Node* adjacentes; // lista simplesmente encadeada sem sentinela (onde o encadeamento acontece através do pai de cada nó)
 };
 
 struct _listAdj {
@@ -77,11 +72,9 @@ void preencheListaAdj(FILE* arqEntrada, ListAdj* lAdj) {
             if(peso == 0.0) continue;
             // como definido, caso o custo de acesso (peso) seja zero, assume-se que não há conexão entre os vértices
 
-            Adjacente* verticeAdjacente = malloc(sizeof(Adjacente));
-            verticeAdjacente->node = criaNode(adj, peso, NULL); // não é relevante saber o pai nesse momento, por isso: NULL
+            Node* verticeAdjacente = criaNode(adj, peso, verticeAtual->adjacentes);
 
             // insere 'verticeAdjacente' no início da lista de adjacência de 'verticeAtual'
-            verticeAdjacente->prox = verticeAtual->adjacentes;
             verticeAtual->adjacentes = verticeAdjacente;
             verticeAtual->numAdjacentes++;
         }
@@ -98,11 +91,10 @@ void preencheListaAdj(FILE* arqEntrada, ListAdj* lAdj) {
 
 float getPesoAresta(ListAdj* lAdj, int idPai, int idFilho) {
     
-    Adjacente* adjPai = lAdj->vertices[idPai]->adjacentes;
-    for(Adjacente* adj = adjPai; adj != NULL; adj = adj->prox) {
-        Node* temp = adj->node;
-        if(getNodeId(temp) == idFilho) return getNodePeso(temp);
-    }
+    Node* adjPai = lAdj->vertices[idPai]->adjacentes;
+    for(Node* adj = adjPai; adj != NULL; adj = getNodePai(adj))
+        if(getNodeId(adj) == idFilho) return getNodePeso(adj);
+    
     return 0;
 }
 
@@ -110,15 +102,17 @@ int getNumVertices(ListAdj* lAdj) {
     return lAdj->numVertices;
 }
 
-int* getAdjacentes(ListAdj* lAdj, Node* vertice) {
-    Vertice* v = lAdj->vertices[getNodeId(vertice)];
-    int* idAdjcentes = malloc(sizeof(int) * v->numAdjacentes);
+Node* getAdjacentes(ListAdj* lAdj, Node* vertice) {
+    // Vertice* v = lAdj->vertices[getNodeId(vertice)];
+    // int* idAdjcentes = malloc(sizeof(int) * v->numAdjacentes);
 
-    int count = 0;
-    for(Adjacente* j = v->adjacentes; j != NULL; j = j->prox) 
-        idAdjcentes[count++] = getNodeId(j->node);
+    // int count = 0;
+    // for(Adjacente* j = v->adjacentes; j != NULL; j = j->prox) 
+    //     idAdjcentes[count++] = getNodeId(j->node);
 
-    return idAdjcentes;
+    // return idAdjcentes;
+
+    return lAdj->vertices[getNodeId(vertice)]->adjacentes;
 }
 
 int getNumAdjacentes(ListAdj* lAdj, Node* vertice) {
@@ -137,11 +131,10 @@ void destroiListaAdj(ListAdj* lAdj) {
     if(lAdj == NULL) return;
 
     for(int v = 0; v < lAdj->numVertices; v++) {
-        Adjacente* atual = lAdj->vertices[v]->adjacentes;
+        Node* atual = lAdj->vertices[v]->adjacentes;
         while(atual != NULL) {
-            Adjacente* temp = atual->prox;
-            destroiNode(atual->node);
-            free(atual);
+            Node* temp = getNodePai(atual);
+            destroiNode(atual);
             atual = temp;
         }
         free(lAdj->vertices[v]);
