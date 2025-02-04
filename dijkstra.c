@@ -35,7 +35,7 @@ Node** dijkstra(ListAdj* grafo) {
         caminhosMinimos[idMin] = min;
         int numAdjacentes = getNumAdjacentes(grafo, min);
         Node* adjacentesMin = getAdjacentes(grafo, min);
-        for(Node* n = adjacentesMin; n != NULL; n = getNodePai(n)) {
+        for(Node* n = adjacentesMin; n != NULL; n = getNodeProx(n)) {
             int idN = getNodeId(n);
             if(!visitado(caminhosMinimos, idN))
                 relax(min, idN, grafo, heap);

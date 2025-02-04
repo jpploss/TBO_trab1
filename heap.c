@@ -96,7 +96,7 @@ static int corrigeDescida(Heap* heap, int posicao) {
 void atualizaDistanciaEPai(Heap* heap, int idFilho, Node* pai, float novaDistancia) {
   int posFilho = heap->posicoes[idFilho];
   setNodePeso(heap->elementos[posFilho], novaDistancia);
-  setNodePai(heap->elementos[posFilho], pai);
+  setNodeProx(heap->elementos[posFilho], pai);
 
   corrigeDescida(heap, posFilho);
   corrigeSubida(heap, posFilho);

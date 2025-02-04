@@ -2,15 +2,15 @@
 
 struct _node {
     int id;
-    Node* pai;
+    Node* prox;
     float peso;
 };
 
-Node* criaNode(int id, float peso, Node* nodePai) {
+Node* criaNode(int id, float peso, Node* nodeProx) {
     Node* n = malloc(sizeof(Node));
     n->id = id;
     n->peso = peso;
-    n->pai = nodePai;
+    n->prox = nodeProx;
     return n;
 }
 
@@ -18,16 +18,16 @@ void setNodePeso(Node* n, float novoPeso) {
     n->peso = novoPeso;
 }
 
-void setNodePai(Node* filho, Node* pai) {
-    filho->pai = pai;
+void setNodeProx(Node* n, Node* nodeProx) {
+    n->prox = nodeProx;
 }
 
 int getNodeId(Node* n) {
     return n->id;
 }
 
-Node* getNodePai(Node* n) {
-    return n->pai;
+Node* getNodeProx(Node* n) {
+    return n->prox;
 }
 
 float getNodePeso(Node* n) {
@@ -38,7 +38,7 @@ Node* copiaNode(Node* n) {
     Node* nodeCopia = malloc(sizeof(Node));
     nodeCopia->id = n->id;
     nodeCopia->peso = n->peso;
-    nodeCopia->pai = n->pai;
+    nodeCopia->prox = n->prox;
     return nodeCopia;
 }
 

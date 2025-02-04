@@ -92,7 +92,7 @@ void preencheListaAdj(FILE* arqEntrada, ListAdj* lAdj) {
 float getPesoAresta(ListAdj* lAdj, int idPai, int idFilho) {
     
     Node* adjPai = lAdj->vertices[idPai]->adjacentes;
-    for(Node* adj = adjPai; adj != NULL; adj = getNodePai(adj))
+    for(Node* adj = adjPai; adj != NULL; adj = getNodeProx(adj))
         if(getNodeId(adj) == idFilho) return getNodePeso(adj);
     
     return 0;
@@ -133,7 +133,7 @@ void destroiListaAdj(ListAdj* lAdj) {
     for(int v = 0; v < lAdj->numVertices; v++) {
         Node* atual = lAdj->vertices[v]->adjacentes;
         while(atual != NULL) {
-            Node* temp = getNodePai(atual);
+            Node* temp = getNodeProx(atual);
             destroiNode(atual);
             atual = temp;
         }

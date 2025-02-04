@@ -44,14 +44,14 @@ int main() {
             continue;
         }
 
-        if(getNodePai(noAtual) == NULL)  { // nó raíz (origem)
+        if(getNodeProx(noAtual) == NULL)  { // nó raíz (origem)
             fprintf(arqSaida, "%s <- %s (Distance: 0.00)\n", nomeNoAtual, nomeNoAtual);
             continue;
         }
 
-        for(Node* n = noAtual; n != NULL; n = getNodePai(n)) {
+        for(Node* n = noAtual; n != NULL; n = getNodeProx(n)) {
             fprintf(arqSaida, "%s", getNomeVertice(grafo, getNodeId(n)));
-            if(getNodePai(n) != NULL) fprintf(arqSaida, " <- ");
+            if(getNodeProx(n) != NULL) fprintf(arqSaida, " <- ");
             else break;
         }
         fprintf(arqSaida, " (Distance: %.02f)\n", getNodePeso(noAtual));
