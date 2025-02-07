@@ -12,7 +12,10 @@ int comparaNode(const void* n1, const void* n2) {
     if(*(Node**)n2 == NULL) return 1;
 
     float p1 = getNodePeso(*(Node**)n1), p2 = getNodePeso(*(Node**)n2);
-    return p1 - p2;
+    float comp = p1 - p2;
+    if(comp < 0) return -1;
+    else if(comp > 0) return 1;
+    return 0;
 }
 
 int main() {
