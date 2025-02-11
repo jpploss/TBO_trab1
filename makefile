@@ -1,5 +1,5 @@
 comp:
-	gcc *.c -o prog
+	gcc main.c heap.c node.c listAdj.c dijkstra.c -o prog
 run:
 	./prog
 runv:

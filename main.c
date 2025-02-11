@@ -24,7 +24,7 @@ int main() {
     
     printf("Lendo arquivo e construindo grafo...\n");
     ListAdj* grafo = criaListaAdj();
-    FILE* arqEntrada = fopen("./casos_teste_v3/caso_teste_medio_4.txt", "r");
+    FILE* arqEntrada = fopen("./casos_teste_v3/caso_teste_medio_1.txt", "r");
     preencheListaAdj(arqEntrada, grafo);
     fclose(arqEntrada);
     printf("Arquivo lido e grafo construído!\n");
