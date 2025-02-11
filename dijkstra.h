@@ -2,9 +2,9 @@
 #define DIJKSTRA_H
 
 #include "heap.h"
-#include "listAdj.h"
+#include "grafo.h"
 #include "node.h"
 
-Node** dijkstra(ListAdj* grafo);
+Node** dijkstra(Grafo* grafo);
 
 #endif

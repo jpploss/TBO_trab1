@@ -1,4 +1,4 @@
-#include "listAdj.h"
+#include "grafo.h"
 
 typedef struct _adjacente Adjacente;
 
@@ -9,14 +9,14 @@ struct _vertice {
     Node* adjacentes; // lista simplesmente encadeada sem sentinela (onde o encadeamento acontece através do pai de cada nó)
 };
 
-struct _listAdj {
+struct _grafo {
     Vertice** vertices;
     int idVerticeOrigem;
     int numVertices;
 };
 
-ListAdj* criaListaAdj() {
-    ListAdj* lAdj = malloc(sizeof(ListAdj));
+Grafo* criaListaAdj() {
+    Grafo* lAdj = malloc(sizeof(Grafo));
     lAdj->numVertices = 0;
     lAdj->idVerticeOrigem = -1;
     lAdj->vertices = NULL;
@@ -43,7 +43,7 @@ static int contaVertices(FILE* arqEntrada) {
     return numVertices;
 }
 
-void preencheListaAdj(FILE* arqEntrada, ListAdj* lAdj) {
+void preencheListaAdj(FILE* arqEntrada, Grafo* lAdj) {
     lAdj->numVertices = contaVertices(arqEntrada);
     lAdj->vertices = malloc(sizeof(Vertice*) * lAdj->numVertices);
 
@@ -79,17 +79,9 @@ void preencheListaAdj(FILE* arqEntrada, ListAdj* lAdj) {
             verticeAtual->numAdjacentes++;
         }
     }
-
-
-    // for(int i = 0; i < lAdj->numVertices; i++) {
-    //     printf("Adjcentes vértice %s:\n", lAdj->vertices[i]->nome);
-    //     for(Adjacente* j = lAdj->vertices[i]->adjacentes; j != NULL; j = j->prox) 
-    //         printf("  id: %d, custo: %.02f\n", getNodeId(j->node), getNodePeso(j->node));
-    //     printf("\n");
-    // }
 }
 
-float getPesoAresta(ListAdj* lAdj, int idPai, int idFilho) {
+float getPesoAresta(Grafo* lAdj, int idPai, int idFilho) {
     
     Node* adjPai = lAdj->vertices[idPai]->adjacentes;
     for(Node* adj = adjPai; adj != NULL; adj = getNodeProx(adj))
@@ -98,36 +90,27 @@ float getPesoAresta(ListAdj* lAdj, int idPai, int idFilho) {
     return 0;
 }
 
-int getNumVertices(ListAdj* lAdj) {
+int getNumVertices(Grafo* lAdj) {
     return lAdj->numVertices;
 }
 
-Node* getAdjacentes(ListAdj* lAdj, Node* vertice) {
-    // Vertice* v = lAdj->vertices[getNodeId(vertice)];
-    // int* idAdjcentes = malloc(sizeof(int) * v->numAdjacentes);
-
-    // int count = 0;
-    // for(Adjacente* j = v->adjacentes; j != NULL; j = j->prox) 
-    //     idAdjcentes[count++] = getNodeId(j->node);
-
-    // return idAdjcentes;
-
+Node* getAdjacentes(Grafo* lAdj, Node* vertice) {
     return lAdj->vertices[getNodeId(vertice)]->adjacentes;
 }
 
-int getNumAdjacentes(ListAdj* lAdj, Node* vertice) {
+int getNumAdjacentes(Grafo* lAdj, Node* vertice) {
     return lAdj->vertices[getNodeId(vertice)]->numAdjacentes;
 }
 
-int getIdOrigem(ListAdj* lAdj) {
+int getIdOrigem(Grafo* lAdj) {
     return lAdj->idVerticeOrigem;
 }
 
-char* getNomeVertice(ListAdj* lAdj, int id) {
+char* getNomeVertice(Grafo* lAdj, int id) {
     return lAdj->vertices[id]->nome;
 }
 
-void destroiListaAdj(ListAdj* lAdj) {
+void destroiListaAdj(Grafo* lAdj) {
     if(lAdj == NULL) return;
 
     for(int v = 0; v < lAdj->numVertices; v++) {

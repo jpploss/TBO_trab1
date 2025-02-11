@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static void relax(Node* pai, int idFilho, ListAdj* grafo, Heap* heap) {
+static void relax(Node* pai, int idFilho, Grafo* grafo, Heap* heap) {
     float pesoPai = getNodePeso(pai);
     float pesoFilhoHeap = getPesoHeap(heap, idFilho);
     float novoPesoFilho = pesoPai + getPesoAresta(grafo, getNodeId(pai), idFilho);
@@ -16,7 +16,7 @@ static int visitado(Node** caminhosMinimos, int id) {
     return caminhosMinimos[id] != NULL;
 }
 
-Node** dijkstra(ListAdj* grafo) {
+Node** dijkstra(Grafo* grafo) {
     
     // inicializa a heap
     int numVertices = getNumVertices(grafo);

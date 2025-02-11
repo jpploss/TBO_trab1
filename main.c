@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "listAdj.h"
+#include "grafo.h"
 #include "heap.h"
 #include "node.h"
 #include "dijkstra.h"
@@ -18,23 +18,39 @@ int comparaNode(const void* n1, const void* n2) {
     return 0;
 }
 
-int main() {
-    
+int main(int argc, char *argv[]) {
+    if(argc != 3) {
+        printf("Problema nos parâmetros na chamada do programa.\nFormato esperado: ./trab1 <nome_arquivo_entrada> <nome_arquivo_saida>.\n");
+        return EXIT_FAILURE;
+    }
+
     clock_t inicio = clock();
     
+    FILE* arqEntrada = fopen(argv[1], "r");
+    if(!arqEntrada) {
+        printf("Não foi possível abrir o arquivo de entrada '%s'.\n", argv[1]);
+        return EXIT_FAILURE;
+    }
+
     printf("Lendo arquivo e construindo grafo...\n");
-    ListAdj* grafo = criaListaAdj();
-    FILE* arqEntrada = fopen("./casos_teste_v3/caso_teste_medio_1.txt", "r");
+    Grafo* grafo = criaListaAdj();
     preencheListaAdj(arqEntrada, grafo);
-    fclose(arqEntrada);
     printf("Arquivo lido e grafo construído!\n");
+    
+    fclose(arqEntrada);
 
     printf("\nRealizando Dijkstra para encontrar os caminhos mínimos...\n");
     Node** caminhosMinimos = dijkstra(grafo);
     printf("Dijkstra feito e caminhos mínimos encontrados!\n");
 
+    FILE* arqSaida = fopen(argv[2], "w");
+    if(!arqSaida) {
+        printf("Não foi possível abrir o arquivo de saída '%s'.\n", argv[2]);
+        fclose(arqEntrada);
+        return EXIT_FAILURE;
+    }
+
     printf("\nSalvando caminhos em arquivo.\n");
-    FILE* arqSaida = fopen("./resultado.txt", "w");
     int numVertices = getNumVertices(grafo);
     qsort(caminhosMinimos, numVertices, sizeof(Node*), comparaNode);
     for(int i = 0; i < numVertices; i++) {
@@ -59,8 +75,8 @@ int main() {
         }
         fprintf(arqSaida, " (Distance: %.02f)\n", getNodePeso(noAtual));
     }
-    fclose(arqSaida);
 
+    fclose(arqSaida);
 
     // liberação de memória
     for(int i = 0; i < getNumVertices(grafo); i++) destroiNode(caminhosMinimos[i]);
@@ -71,5 +87,5 @@ int main() {
     double tempoTotal = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
     printf("\nTempo decorrido %f seconds\n", tempoTotal);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
