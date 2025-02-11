@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static void relax(Node* pai, int idFilho, Grafo* grafo, Heap* heap) {
+static void relax(Node* pai, int idFilho, float pesoAresta, Heap* heap) {
     float pesoPai = getNodePeso(pai);
     float pesoFilhoHeap = getPesoHeap(heap, idFilho);
-    float novoPesoFilho = pesoPai + getPesoAresta(grafo, getNodeId(pai), idFilho);
+    float novoPesoFilho = pesoPai + pesoAresta;
 
     if(pesoFilhoHeap == INFINITO || pesoFilhoHeap > novoPesoFilho) {
         atualizaDistanciaEPai(heap, idFilho, pai, novoPesoFilho);
@@ -38,7 +38,7 @@ Node** dijkstra(Grafo* grafo) {
         for(Node* n = adjacentesMin; n != NULL; n = getNodeProx(n)) {
             int idN = getNodeId(n);
             if(!visitado(caminhosMinimos, idN))
-                relax(min, idN, grafo, heap);
+                relax(min, idN, getNodePeso(n), heap);
         }
     }
 
