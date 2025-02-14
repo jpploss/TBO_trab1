@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/// @brief TAD responsável pela criação, manutenção e destruição de um nó contendo um id, um peso e um ponteiro para um próximo node.
+/// @brief TAD responsável pela criação, manutenção e destruição de um nó contendo um id, um peso e um ponteiro para outro nó.
 typedef struct _node Node;
 
 /// @brief Cria um novo nó a partir de um id e peso fornecidos.
