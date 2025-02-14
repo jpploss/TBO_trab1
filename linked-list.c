@@ -37,17 +37,25 @@ unsigned int getSize(LinkedList* list) {
   return list->size;
 }
 
-Node* removeMinNode(LinkedList* list, int (*compare)(Node*, Node*)) {
+Node* removeMinNode(LinkedList* list) {
   if (list->size == 0) return NULL;
 
-  LLNode *current = list->head, *prev = NULL;
-  LLNode *min = current, *prevMin = NULL;
+  LLNode *current = list->head, *min = list->head;
+  LLNode *prev = NULL, *prevMin = NULL;
 
-  while (current->next != NULL) {
-    if (compare(current->next->data, min->data) < 0) {
-      min = current->next;
-      prevMin = current;
+  float menorPeso = INFINITO;
+
+  while (current != NULL) {
+    if (menorPeso == INFINITO && getNodePeso(current->data) != INFINITO) {
+      menorPeso = getNodePeso(current->data);
+      min = current;
+      prevMin = prev;
+    } else if (getNodePeso(current->data) < menorPeso && getNodePeso(current->data) != INFINITO) {
+      menorPeso = getNodePeso(current->data);
+      min = current;
+      prevMin = prev;
     }
+    prev = current;
     current = current->next;
   }
 

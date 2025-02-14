@@ -20,23 +20,21 @@ static int visitado(Node** caminhosMinimos, int id) {
   return caminhosMinimos[id] != NULL;
 }
 
-static int comparaPesoNodes(Node* a, Node* b) {
-  return (getNodePeso(a) > getNodePeso(b)) - (getNodePeso(a) < getNodePeso(b));
-}
-
 Node** dijkstra(Grafo* grafo) {
   int numVertices = getNumVertices(grafo);
   LinkedList* lista = createLinkedList();
   int idOrigem = getIdOrigem(grafo);
 
   for (int i = 0; i < numVertices; i++) {
-    Node* novoNode = criaNode(i, i == idOrigem ? 0 : INFINITO, NULL);
-    insertValue(lista, novoNode);
+    if (i == idOrigem)
+      insertValue(lista, criaNode(i, 0, NULL));
+    else
+      insertValue(lista, criaNode(i, INFINITO, NULL));
   }
 
   Node** caminhosMinimos = calloc(numVertices, sizeof(Node*));
   while (getSize(lista) > 0) {
-    Node* min = removeMinNode(lista, comparaPesoNodes);
+    Node* min = removeMinNode(lista);
     int idMin = getNodeId(min);
 
     caminhosMinimos[idMin] = min;

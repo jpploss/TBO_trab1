@@ -14,11 +14,7 @@ LinkedList* createLinkedList();
 /// @param value node a ser inserido
 void insertValue(LinkedList* list, Node* value);
 
-/// @brief Remover o node com menor peso da lista encadeada
-/// @param list lista
-/// @param compare funcao que compara os nodes (com base no peso)
-/// @return Node com menor peso
-Node* removeMinNode(LinkedList* list, int (*compare)(Node*, Node*));
+Node* removeMinNode(LinkedList* list);
 
 /// @brief Obtem o tamanho da lista
 /// @param list lista encadeada
