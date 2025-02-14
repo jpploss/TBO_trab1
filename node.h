@@ -1,8 +1,9 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#define INFINITO -1
 
 /// @brief TAD responsável pela criação, manutenção e destruição de um nó contendo um id, um peso e um ponteiro para um próximo node.
 typedef struct _node Node;
@@ -36,6 +37,11 @@ int getNodeId(Node* n);
 /// @param n nó válido a partir do qual será retornado o próximo
 /// @return Ponteiro para o próximo nó a partir do nó de entrada (ou NULL caso não exista).
 Node* getNodeProx(Node* n);
+
+/// @brief Retorna 1 caso o peso do nó seja infinito, 0 caso contrário.
+/// @param n nó a ser verificado
+/// @return 1 caso o peso do nó seja infinito, 0 caso contrário
+int pesoInfinito(Node* n);
 
 /// @brief Retorna o peso de um nó válido.
 /// @param n nó a partir do qual será retornado um peso

@@ -1,47 +1,51 @@
 #include "node.h"
 
 struct _node {
-    int id;
-    Node* prox;
-    float peso;
+  int id;
+  Node* prox;
+  float peso;
 };
 
 Node* criaNode(int id, float peso, Node* nodeProx) {
-    Node* n = malloc(sizeof(Node));
-    n->id = id;
-    n->peso = peso;
-    n->prox = nodeProx;
-    return n;
+  Node* n = malloc(sizeof(Node));
+  n->id = id;
+  n->peso = peso;
+  n->prox = nodeProx;
+  return n;
 }
 
 void setNodePeso(Node* n, float novoPeso) {
-    n->peso = novoPeso;
+  n->peso = novoPeso;
 }
 
 void setNodeProx(Node* n, Node* nodeProx) {
-    n->prox = nodeProx;
+  n->prox = nodeProx;
 }
 
 int getNodeId(Node* n) {
-    return n->id;
+  return n->id;
+}
+
+int pesoInfinito(Node* n) {
+  return getNodePeso(n) == INFINITO;
 }
 
 Node* getNodeProx(Node* n) {
-    return n->prox;
+  return n->prox;
 }
 
 float getNodePeso(Node* n) {
-    return n->peso;
+  return n->peso;
 }
 
 Node* copiaNode(Node* n) {
-    Node* nodeCopia = malloc(sizeof(Node));
-    nodeCopia->id = n->id;
-    nodeCopia->peso = n->peso;
-    nodeCopia->prox = n->prox;
-    return nodeCopia;
+  Node* nodeCopia = malloc(sizeof(Node));
+  nodeCopia->id = n->id;
+  nodeCopia->peso = n->peso;
+  nodeCopia->prox = n->prox;
+  return nodeCopia;
 }
 
 void destroiNode(Node* n) {
-    if(n != NULL) free(n);
+  if (n != NULL) free(n);
 }
