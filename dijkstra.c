@@ -5,12 +5,12 @@
 
 #include "linked-list.h"
 
-static void relax(Node* pai, Node* filho, float pesoAresta) {
+static void relax(Node* pai, int idFilho, float pesoAresta, LinkedList* lista) {
   float pesoPai = getNodePeso(pai);
-  float pesoFilho = getNodePeso(filho);
+  Node* filho = getNodeById(lista, idFilho);
   float novoPesoFilho = pesoPai + pesoAresta;
 
-  if (pesoFilho == INFINITO || pesoFilho > novoPesoFilho) {
+  if (getNodePeso(filho) == INFINITO || getNodePeso(filho) > novoPesoFilho) {
     setNodePeso(filho, novoPesoFilho);
     setNodeProx(filho, pai);
   }
@@ -20,46 +20,34 @@ static int visitado(Node** caminhosMinimos, int id) {
   return caminhosMinimos[id] != NULL;
 }
 
-static int comparaNodes(void* a, void* b) {
-  Node* nodeA = (Node*)a;
-  Node* nodeB = (Node*)b;
-  if (getNodePeso(nodeA) < getNodePeso(nodeB))
-    return -1;
-  if (getNodePeso(nodeA) > getNodePeso(nodeB))
-    return 1;
-  return 0;
+static int comparaPesoNodes(Node* a, Node* b) {
+  return (getNodePeso(a) > getNodePeso(b)) - (getNodePeso(a) < getNodePeso(b));
 }
 
 Node** dijkstra(Grafo* grafo) {
   int numVertices = getNumVertices(grafo);
+  LinkedList* lista = createLinkedList();
   int idOrigem = getIdOrigem(grafo);
 
-  // Lista encadeada para substituir a heap
-  LinkedList* list = createLinkedList();
-
   for (int i = 0; i < numVertices; i++) {
-    if (i == idOrigem)
-      insertValue(list, criaNode(i, 0, NULL));
-    else
-      insertValue(list, criaNode(i, INFINITO, NULL));
+    Node* novoNode = criaNode(i, i == idOrigem ? 0 : INFINITO, NULL);
+    insertValue(lista, novoNode);
   }
 
   Node** caminhosMinimos = calloc(numVertices, sizeof(Node*));
-
-  while (getSize(list) > 0) {
-    // Obtem o node de menor peso na lista encadeada
-    Node* min = (Node*)removeMinValue(list, comparaNodes);
+  while (getSize(lista) > 0) {
+    Node* min = removeMinNode(lista, comparaPesoNodes);
     int idMin = getNodeId(min);
-    caminhosMinimos[idMin] = min;
 
-    Node* adjacentes = getAdjacentes(grafo, min);
-    for (Node* n = adjacentes; n != NULL; n = getNodeProx(n)) {
+    caminhosMinimos[idMin] = min;
+    Node* adjacentesMin = getAdjacentes(grafo, min);
+    for (Node* n = adjacentesMin; n != NULL; n = getNodeProx(n)) {
       int idN = getNodeId(n);
       if (!visitado(caminhosMinimos, idN))
-        relax(min, n, getNodePeso(n));
+        relax(min, idN, getNodePeso(n), lista);
     }
   }
 
-  destroyLinkedList(list);
+  destroyLinkedList(lista);
   return caminhosMinimos;
 }

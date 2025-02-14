@@ -3,21 +3,21 @@
 #include "stdlib.h"
 
 typedef struct LLNode {
-  void* data;  // Sera um ponteiro para o tipo 'Node'
+  Node* data;
   struct LLNode* next;
 } LLNode;
-
-static LLNode* createLLNode(void* value) {
-  LLNode* node = malloc(sizeof(LLNode));
-  node->data = value;
-  node->next = NULL;
-  return node;
-}
 
 struct _LinkedList {
   LLNode* head;
   unsigned int size;
 };
+
+static LLNode* createLLNode(Node* value) {
+  LLNode* node = malloc(sizeof(LLNode));
+  node->data = value;
+  node->next = NULL;
+  return node;
+}
 
 LinkedList* createLinkedList() {
   LinkedList* list = malloc(sizeof(LinkedList));
@@ -26,7 +26,7 @@ LinkedList* createLinkedList() {
   return list;
 }
 
-void insertValue(LinkedList* list, void* value) {
+void insertValue(LinkedList* list, Node* value) {
   LLNode* newNode = createLLNode(value);
   newNode->next = list->head;
   list->head = newNode;
@@ -37,35 +37,39 @@ unsigned int getSize(LinkedList* list) {
   return list->size;
 }
 
-void* removeMinValue(LinkedList* list, int (*compare)(void*, void*)) {
+Node* removeMinNode(LinkedList* list, int (*compare)(Node*, Node*)) {
   if (list->size == 0) return NULL;
 
-  LLNode* current = list->head;
-  LLNode* prev = NULL;
-  LLNode* min = current;
-  LLNode* prevMin = NULL;
+  LLNode *current = list->head, *prev = NULL;
+  LLNode *min = current, *prevMin = NULL;
 
-  while (current != NULL) {
-    if (compare(current->data, min->data) < 0) {
-      min = current;
-      prevMin = prev;
+  while (current->next != NULL) {
+    if (compare(current->next->data, min->data) < 0) {
+      min = current->next;
+      prevMin = current;
     }
-    prev = current;
     current = current->next;
   }
 
-  void* data = min->data;
+  Node* data = min->data;
 
-  if (prevMin == NULL) {
+  if (prevMin == NULL)
     list->head = min->next;
-  } else {
+  else
     prevMin->next = min->next;
-  }
 
   free(min);
   list->size--;
-
   return data;
+}
+
+Node* getNodeById(LinkedList* list, int id) {
+  LLNode* current = list->head;
+  while (current != NULL) {
+    if (getNodeId(current->data) == id) return current->data;
+    current = current->next;
+  }
+  return NULL;
 }
 
 void destroyLinkedList(LinkedList* list) {
