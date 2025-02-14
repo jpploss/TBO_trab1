@@ -7,7 +7,7 @@
 /// @brief TAD responsável pela criação, manutenção e destruição de um nó contendo um id, um peso e um ponteiro para outro nó.
 typedef struct _node Node;
 
-/// @brief Cria um novo nó a partir de um id e peso fornecidos.
+/// @brief Cria um novo nó a partir de um id, peso e ponteiro para outro nó fornecidos.
 /// @param id id do nó a ser criado
 /// @param peso peso do nó a ser criado
 /// @param nodeProx ponteiro para o próximo nó (ou NULL caso não exista próximo)
