@@ -3,14 +3,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void relax(Node* pai, Node** aux, int idFilho, float pesoAresta) {
+#include "linked-list.h"
+
+static void relax(Node* pai, Node* filho, float pesoAresta) {
   float pesoPai = getNodePeso(pai);
-  float pesoFilho = getNodePeso(aux[idFilho]);
+  float pesoFilho = getNodePeso(filho);
   float novoPesoFilho = pesoPai + pesoAresta;
 
   if (pesoFilho == INFINITO || pesoFilho > novoPesoFilho) {
-    setNodePeso(aux[idFilho], novoPesoFilho);
-    setNodeProx(aux[idFilho], pai);
+    setNodePeso(filho, novoPesoFilho);
+    setNodeProx(filho, pai);
   }
 }
 
@@ -18,51 +20,46 @@ static int visitado(Node** caminhosMinimos, int id) {
   return caminhosMinimos[id] != NULL;
 }
 
+static int comparaNodes(void* a, void* b) {
+  Node* nodeA = (Node*)a;
+  Node* nodeB = (Node*)b;
+  if (getNodePeso(nodeA) < getNodePeso(nodeB))
+    return -1;
+  if (getNodePeso(nodeA) > getNodePeso(nodeB))
+    return 1;
+  return 0;
+}
+
 Node** dijkstra(Grafo* grafo) {
   int numVertices = getNumVertices(grafo);
   int idOrigem = getIdOrigem(grafo);
 
-  // Vetor auxiliar de nodes
-  Node** aux = calloc(numVertices, sizeof(Node*));
+  // Lista encadeada para substituir a heap
+  LinkedList* list = createLinkedList();
 
   for (int i = 0; i < numVertices; i++) {
     if (i == idOrigem)
-      aux[i] = criaNode(i, 0, NULL);
+      insertValue(list, criaNode(i, 0, NULL));
     else
-      aux[i] = criaNode(i, INFINITO, NULL);
+      insertValue(list, criaNode(i, INFINITO, NULL));
   }
 
   Node** caminhosMinimos = calloc(numVertices, sizeof(Node*));
 
-  while (1) {
-    Node* min = NULL;
-    int indexMin = -1;
-
-    // Busca o menor o no de menor peso
-    for (int i = 0; i < numVertices; i++) {
-      if (!visitado(caminhosMinimos, i) && (min == NULL || getNodePeso(aux[i]) < getNodePeso(min))) {
-        min = aux[i];
-        indexMin = i;
-      }
-    }
-
-    // Se nao existir mais um menor no ainda nao visitado, encerra o loop
-    if (indexMin == -1)
-      break;
-
-    caminhosMinimos[indexMin] = min;
-
-    // Remove no do vetor auxiliar
-    aux[indexMin] = NULL;
+  while (getSize(list) > 0) {
+    // Obtem o node de menor peso na lista encadeada
+    Node* min = (Node*)removeMinValue(list, comparaNodes);
+    int idMin = getNodeId(min);
+    caminhosMinimos[idMin] = min;
 
     Node* adjacentes = getAdjacentes(grafo, min);
     for (Node* n = adjacentes; n != NULL; n = getNodeProx(n)) {
       int idN = getNodeId(n);
       if (!visitado(caminhosMinimos, idN))
-        relax(min, aux, idN, getNodePeso(n));
+        relax(min, n, getNodePeso(n));
     }
   }
 
-  free(aux);
+  destroyLinkedList(list);
   return caminhosMinimos;
 }
