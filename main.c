@@ -5,7 +5,6 @@
 #include "grafo.h"
 #include "heap.h"
 #include "node.h"
-#include "dijkstra.h"
 
 int comparaNode(const void* n1, const void* n2) {
     if(*(Node**)n1 == NULL) return -1;
@@ -17,6 +16,8 @@ int comparaNode(const void* n1, const void* n2) {
     else if(comp > 0) return 1;
     return 0;
 }
+
+Node** dijkstra(Grafo* grafo); // assinatura de uma função externa que deverá ser linkada durante a compilação
 
 int main(int argc, char *argv[]) {
     if(argc != 3) {

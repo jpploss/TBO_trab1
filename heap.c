@@ -30,10 +30,6 @@ static int direito(int i) {
   return 2 * i + 2;
 }
 
-int pesoInfinito(Node* n) {
-  return getNodePeso(n) == INFINITO;
-}
-
 static int corrigeSubida(Heap* heap, int pos) {
   Node** elementos = heap->elementos;
   int* posicoes = heap->posicoes;

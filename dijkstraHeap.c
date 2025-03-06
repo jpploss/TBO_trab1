@@ -1,6 +1,9 @@
-#include "dijkstra.h"
 #include <stdlib.h>
 #include <stdio.h>
+
+#include "heap.h"
+#include "node.h"
+#include "grafo.h"
 
 static void relax(Node* pai, int idFilho, float pesoAresta, Heap* heap) {
     float pesoPai = getNodePeso(pai);

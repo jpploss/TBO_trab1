@@ -50,6 +50,8 @@ void preencheListaAdj(FILE* arqEntrada, Grafo* lAdj) {
     char nomeVerticeOrigem[31];
     fscanf(arqEntrada, "%[^\n]\n", nomeVerticeOrigem);
 
+    int countAresta = 0;
+
     for(int v = 0; v < lAdj->numVertices; v++) {
         Vertice* verticeAtual = malloc(sizeof(Vertice));
         lAdj->vertices[v] = verticeAtual;
@@ -77,8 +79,11 @@ void preencheListaAdj(FILE* arqEntrada, Grafo* lAdj) {
             // insere 'verticeAdjacente' no início da lista de adjacência de 'verticeAtual'
             verticeAtual->adjacentes = verticeAdjacente;
             verticeAtual->numAdjacentes++;
+            countAresta++;
         }
     }
+
+    printf("n° vértices: %d / n° arestas: %d\n", lAdj->numVertices, countAresta);
 }
 
 float getPesoAresta(Grafo* lAdj, int idPai, int idFilho) {

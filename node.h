@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define INFINITO -1
+
 /// @brief TAD responsável pela criação, manutenção e destruição de um nó contendo um id, um peso e um ponteiro para outro nó.
 typedef struct _node Node;
 
@@ -46,6 +48,11 @@ float getNodePeso(Node* n);
 /// @param n nó a ser copiado
 /// @return Ponteiro para a estrura do nó cópia alocada dinamicamente.
 Node* copiaNode(Node* n);
+
+/// @brief Verfica se um nó tem peso infinito.
+/// @param n nó válido a ser verificado se o peso é infinito
+/// @return 0 se o peso não é infinito e 1 caso contrário.
+int pesoInfinito(Node* n);
 
 /// @brief Libera toda a memória alocada para o nó 'n'.
 /// @param n nó a ser liberado

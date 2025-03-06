@@ -42,6 +42,10 @@ Node* copiaNode(Node* n) {
     return nodeCopia;
 }
 
+int pesoInfinito(Node* n) {
+    return getNodePeso(n) == INFINITO;
+}
+
 void destroiNode(Node* n) {
     if(n != NULL) free(n);
 }

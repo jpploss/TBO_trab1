@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include "node.h"
 
-#define INFINITO -1
-
 /// @brief TAD responsável pela criação, manutenção e destruição de uma min heap.
 ///
 /// Obs.: nos nós da heap, será utilizado -1 significando infinito.
@@ -15,11 +13,6 @@ typedef struct _heap Heap;
 /// @param numVertices quantidade de elementos da heap
 /// @return Ponteiro para a estrutura da heap alocada dinamicamente.
 Heap* criaHeap(int numVertices);
-
-/// @brief Verfica se um nó tem peso infinito.
-/// @param n nó válido a ser verificado se o peso é infinito
-/// @return 0 se o peso não é infinito e 1 caso contrário.
-int pesoInfinito(Node* n);
 
 /// @brief Insere um novo elemento na heap.
 /// @param heap heap onde será inserido o novo elemento
