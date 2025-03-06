@@ -1,4 +1,4 @@
-# Implementação do Algoritmo de Dijkstra com Heap de Fibonacci
+# Implementação do Algoritmo de Dijkstra com Heap Binária
 
 ## Introdução
 
