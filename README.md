@@ -126,7 +126,7 @@ Conforme dito, o problema de caminhos mínimos foi resolvido utilizando o **algo
 1. **Heap mínima binária**
 2. **Lista simplesmente encadeada sem sentinela**
 
-A seguir, tem-se as principais diferenças e o impacto de cada abordagem no desempenho do algoritmo. 
+A seguir, tem-se as principais diferenças e o impacto de cada abordagem no desempenho do algoritmo.
 
 ---
 
