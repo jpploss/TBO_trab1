@@ -1,226 +1,252 @@
-# Implementação do Algoritmo de Dijkstra
+# Implementação do Algoritmo de Dijkstra com Heap Binária e Lista Encadeada
+
+## Índice 📚
+
+- [Implementação do Algoritmo de Dijkstra com Heap Binária e Lista Encadeada](#implementação-do-algoritmo-de-dijkstra-com-heap-binária-e-lista-encadeada)
+  - [Índice 📚](#índice-)
+  - [Introdução](#introdução)
+  - [Arquivos e Suas Funcionalidades](#arquivos-e-suas-funcionalidades)
+    - [`node.c`](#nodec)
+    - [`grafo.c`](#grafoc)
+    - [`linked-list.c`](#linked-listc)
+    - [`heap.c`](#heapc)
+    - [`main.c`](#mainc)
+    - [`dijkstra.c`](#dijkstrac)
+  - [Implementação com Heap](#implementação-com-heap)
+  - [Implementação com Lista Encadeada](#implementação-com-lista-encadeada)
+  - [Comparação de Desempenho](#comparação-de-desempenho)
+  - [Conclusões](#conclusões)
+  - [Parâmetros de chamada](#parâmetros-de-chamada)
+  - [Entrada](#entrada)
+  - [Saída](#saída)
+  - [Execução do Programa](#execução-do-programa)
 
 ## Introdução
 
-O código segue uma modularização que agrega com clareza, organização e reusabilidade. Além disso, o projeto é gerenciado por um **Makefile**, que automatiza a compilação e execução.
-
-Este documento detalha:
-- **A funcionalidade de cada arquivo**.
-- **A lógica do Makefile**.
-- **Como a entrada é processada**.
-- **Passos para execução**.
-- **Possíveis melhorias**.
+O programa tem como objetivo resolver o problema dos caminhos mínimos de fonte única utilizando o algoritmo de Dijkstra com duas estruturas auxiliares
+distintas. A seguir, tem-se uma descrição das estruturas desenvolvidas e uma comparação de performance entre as duas estruturas utilizadas pelo Dijkstra.
 
 ---
 
 ## Arquivos e Suas Funcionalidades
 
-----------------
+### `node.c`
 
-# `main.c` - **Execução do Programa**
+Este arquivo define uma estrutura básica chamada `Node` contendo três campos: `id` (inteiro), `peso` (float) e `prox` (ponteiro para Node). O significado de cada campo depende da aplicação. O campo `peso` pode tanto indicar o peso de uma aresta (como é o caso dos nós em um lista de adjacências no TAD grafo) quanto indicar o custo até um nó fonte (como acontece com os nós na fila de prioridade). O campo `prox` pode tanto ser usado para o encadeamento de uma lista (como é o caso das listas de adjacências no TAD grafo) quanto para indicar o pai de um nó em uma árvore de caminhos mínimos (como acontece com os nós na fila de prioridade).
 
-Responsável por **manipular os TADs criados** e **salvar os resultados** em um arquivo de saída. Ele também mede o tempo de execução do algoritmo.
+**Funções Chave**:
 
----
-
-## **Principais Pontos**  
-- **Fluxo do Programa**:  
-  1. Valida os argumentos de entrada (arquivo de entrada e saída).  
-  2. Constrói o grafo a partir do arquivo de entrada.  
-  3. Executa o algoritmo de Dijkstra para encontrar os caminhos mínimos.  
-  4. Ordena e salva os resultados no arquivo de saída.  
-  5. Libera a memória alocada e exibe o tempo de execução.  
-
-- **Funções Chave**:  
-  - `comparaNode`: Função de comparação para ordenar os nós pelo peso.  
-
-- **Integração**:  
-  - Utiliza os módulos `grafo`, `dijkstra` e `node` para construir o grafo, calcular os caminhos mínimos e gerenciar os nós.  
+- getters e setters.
+- `criaNode`: Cria um novo nó com ID, peso e próximo nó especificados.
+- `destroiNode`: Libera a memória alocada para o nó.
 
 ---
 
-## **Decisões Importantes**  
-- **Ordenação dos Resultados**: Os caminhos mínimos são ordenados pelo peso antes de serem salvos no arquivo de saída.  
-- **Medição de Tempo**: O tempo de execução é medido e exibido ao final, permitindo a análise de desempenho.  
+### `grafo.c`
 
-----------------
+Este arquivo implementa a **estrutura do grafo** utilizando **listas de adjacências**. Ele é responsável por construir o grafo a partir do arquivo de entrada e fornecer funções de acesso e liberação de memória.
 
-# `dijkstra.c` - **Análise do Algoritmo de Dijkstra**
+**Funções Chave**:  
 
-O problema de caminhos mínimos foi resolvido utilizando o **algoritmo de Dijkstra** em duas abordagens distintas:  
-1. **Implementação com Heap** – que otimiza as operações de extração e atualização de prioridades.  
-2. **Implementação com Lista Encadeada** – que utiliza uma estrutura mais simples, mas com maior custo computacional.  
-
-A seguir, detalhamos as principais diferenças e o impacto de cada abordagem no desempenho do algoritmo.  
+- `preencheListaAdj`: Lê o arquivo de entrada e constrói o grafo.  
+- `getAdjacentes`: Retorna a lista de nós adjacentes de um vértice.  
+- `destroiListaAdj`: Libera a memória alocada para o grafo.  
 
 ---
 
-## **1. Implementação com Heap (Fila de Prioridade Eficiente)**  
+### `linked-list.c`
 
-A primeira versão do **Dijkstra** foi implementada utilizando uma **Heap** como fila de prioridade. Essa estrutura permite a extração eficiente do menor elemento e a atualização de pesos com um custo otimizado, resultando em um tempo de execução próximo de **O(V log V)**.  
+Este arquivo implementa uma **lista simplesmente encadeada sem sentinela** como fila de prioridades para o algoritmo de Dijkstra. Apesar de ser menos eficiente que a heap, é uma estrutura mais simples de implementar.
 
-### **Funcionamento:**  
-- A heap é **inicializada** com todos os nós do grafo, sendo o nó de origem atribuído com custo **zero** e os demais com custo infinito.  
-- A cada iteração, o **nó com menor custo** é extraído da heap e seus vizinhos são avaliados para atualização das distâncias.  
-- Se um vizinho pode ser alcançado com menor custo, ele é atualizado na heap e tem seu **nó pai ajustado**, garantindo a reconstrução correta do caminho mínimo.  
-
-### **Principais Vantagens:**  
-✅ Melhor eficiência para grafos grandes, pois a extração do menor custo ocorre em **O(log V)**.  
-✅ Atualizações rápidas na fila de prioridade, reduzindo o tempo total de execução.  
-✅ Boa escalabilidade para redes com **muitos vértices e arestas**.  
-
-### **Desvantagens:**  
-❌ A implementação da **Heap** é mais complexa e exige mais memória do que outras abordagens.  
+Para otimizar operações de inserção e decrescimento de custo optou-se por não ordenar a lista.
 
 ---
 
-## **2. Implementação com Lista Encadeada (Fila de Prioridade Simples)**  
+**Funções Chave**:  
 
-A segunda implementação do algoritmo de Dijkstra substitui a heap por uma **lista encadeada ordenada**, onde os nós são armazenados em ordem crescente de custo. Embora mais simples de implementar, essa abordagem **tem um custo maior na busca pelo menor elemento**, resultando em um tempo de execução **O(V²)** em casos desfavoráveis, visto que a lista deve ser percorrida a cada iteração.
-
-### **Funcionamento:**  
-- A estrutura é inicializada como uma **lista ordenada** contendo todos os nós do grafo. O nó de origem começa com custo **zero** e os demais com infinito.  
-- A cada iteração, percorremos a lista para encontrar o **nó com menor custo**, que é então removido e processado.  
-- Os vizinhos do nó removido são atualizados conforme necessário, garantindo a propagação das menores distâncias ao longo da rede.  
-
-### **Principais Vantagens:**  
-✅ Implementação mais simples, sem a necessidade de gerenciar estruturas complexas como heaps.  
-✅ Menor consumo de memória, pois não exige estruturas adicionais além da lista encadeada.  
-
-### **Desvantagens:**  
-❌ O tempo de busca do menor nó cresce significativamente à medida que o grafo aumenta.  
-❌ A ordenação manual dos elementos na lista encadeada torna o algoritmo **menos eficiente para grandes volumes de dados**.  
+- `insertValue`: Insere um novo nó no início da lista.  
+- `removeMinNode`: Percorre a lista para encontrar e remover o nó com menor peso.  
+- `getNodeById`: Busca um nó pelo ID na lista.
+  
 ---
 
-## **Comparação de Desempenho**  
+### `heap.c`
 
-Para avaliar a eficiência de ambas as implementações, comparamos seu desempenho em relação à média dos tipos de arquivos de entrada:
+Este arquivo implementa uma **heap mínima binária** para gerenciar a fila de prioridades utilizada no algoritmo de Dijkstra.
 
-| Implementação              |     Complexidade    |         Muito Pequeno          |      Pequeno     |     Médio      |
+Para otimizar operações de busca optou-se por armazenar um vetor de posições dentro da estrutura, o que deixa constante o tempo de busca (apesar do aumento do consumo de memória). No vetor de posições, o índice i fornece o índice da posição do nó de id i na heap.
+
+---
+**Funções Chave**:
+
+- `insereHeap`: Insere um novo nó na heap e corrige sua posição.  
+- `extraiMenorElemento`: Remove e retorna o nó com menor peso (raiz da heap).  
+- `atualizaDistanciaEPai`: Atualiza o peso e o pai de um nó, ajustando sua posição na heap.
+
+---
+
+### `main.c`
+
+Programa cliente que **manipula os TADs criados** e **salva os resultados** em um arquivo de saída, além de calcular o tempo de execução do algoritmo.
+
+**Fluxo do Programa**:  
+
+1. Valida os argumentos de entrada (arquivo de entrada e saída).  
+2. Constrói o grafo a partir do arquivo de entrada.  
+3. Executa o algoritmo de Dijkstra para encontrar os caminhos mínimos.  
+4. Ordena e salva os resultados no arquivo de saída.  
+5. Libera a memória alocada e exibe o tempo de execução.  
+
+**Funções Chave**:  
+
+- `comparaNode`: Função de comparação entre dois nós pelo peso. A função é utilizada como argumento na chamada ao quicksort da biblioteca padrão.  
+
+**Integração**:  
+  
+- Utiliza os módulos `Grafo`, `Dijkstra` e `Node` para construir o grafo, calcular os caminhos mínimos e gerenciar os nós.  
+
+---
+
+### `dijkstra.c`
+
+**Fluxo de execução**  
+
+- A estrutura é **inicializada** com todos os nós do grafo, sendo o nó de origem atribuído com custo **zero** e os demais com custo infinito.
+- A cada iteração, o **nó com menor custo** é extraído da estrutura e seus vizinhos são avaliados para atualização das distâncias.  
+- Se um vizinho pode ser alcançado com menor custo, ele é relaxado (atualiza-se o **nó pai** e o **peso**).
+
+É importante destacar que o Dijkstra realiza quatro operações básicas sobre as estruturas: inserção, extração de mínimo, busca (necessária antes do relaxamento) e descrescimento de chave.
+A implementação dessas operações é crítica para o desempenho do algoritmo.
+
+Durante a execução do Dijkstra para um grafo com V vértices e E arestas, tem-se: V operações de inserção, V operações de extração de mínimo, E operações de
+busca e, no máximo, E operações de descrescimento de chave.
+
+Conforme dito, o problema de caminhos mínimos foi resolvido utilizando o **algoritmo de Dijkstra** com duas estruturas distintas. São elas:  
+
+1. **Heap mínima binária**
+2. **Lista simplesmente encadeada sem sentinela**
+
+A seguir, tem-se as principais diferenças e o impacto de cada abordagem no desempenho do algoritmo. 
+
+---
+
+## Implementação com Heap  
+
+**Custos de operações** sobre a heap:
+
+`inserção`: O(log(V))
+
+`extração de mínimo`: O(log(V))
+
+`busca`: O(1)
+
+`descrescimento de chave`: O(log(V))
+
+**Custo total** do Dijkstra com heap:
+
+V\*O(log(V)) + V\*O(log(V)) + E\*O(1) + E\*O(log(V)) = O((V + E)\*log(V)) = **O(V\*log(V))** para grafos esparsos ou **O(V²\*log(V))** para grafos densos.
+
+**Principais Vantagens:**
+
+✅ Melhor eficiência para grafos com muitos vértices.
+
+**Desvantagens:**
+
+❌ Implementação mais complexa.
+
+❌ Maior consumo de memória (por causa do vetor de posições e pelo fato do vetor contendo a heap ter tamanho fixo, ou seja, mesmo após as remoções, o tamanho permanece inalterado).  
+
+---
+
+## Implementação com Lista Encadeada  
+
+**Custos de operações** sobre a lista:
+
+`inserção`: O(1)
+
+`extração de mínimo`: O(V)
+
+`busca`: O(V)
+
+`descrescimento de chave`: O(1)
+
+**Custo total** do Dijkstra com lista:
+
+V\*O(1) + V\*O(V) + E\*O(V) + E\*O(1) = O(V² + V\*E) = **O(V²)** para grafos esparsos ou **O(V³)** para grafos densos.
+
+**Principais Vantagens:**
+
+✅ Implementação mais simples.
+
+✅ Menor consumo de memória (uma vez que apenas os nós presentes são armazenados em memória).  
+
+**Desvantagens:**
+
+❌ Os tempos de extração do menor nó e de busca crescem significativamente à medida que o número de vértices aumenta.
+
+---
+
+## Comparação de Desempenho  
+
+Para avaliar a eficiência de ambas as implementações, comparou-se seu desempenho em relação à média dos tipos de arquivos de entrada:
+
+| Implementação              |     Complexidade    |         Grafo Muito Pequeno    | Grafo Pequeno    |   Grafo Médio  |
 |----------------------------|---------------------|--------------------------------|------------------|----------------|
-| **Heap**                   | O((E + V) log V)      | 0.00046s                       | 0.083s           | 4,27s          |
-| **Lista Encadeada Ordenada** | O(V²)             | 0,0004s                        | 0,22s            | 48,14s         |
+| **Heap**                   | O((E + V)\*log(V))  | 0.00046s                       | 0.083s           | 4,27s          |
+| **Lista Encadeada**        | O(V² + V\*E)        | 0,0004s                        | 0,22s            | 48,14s         |
 
 ---
 
-## **Conclusões**  
+## Conclusões  
 
-- A **Heap** apresentou **desempenho superior**, especialmente para grafos grandes, devido à eficiência da extração e atualização de nós.
-- Para grafos pequenos, a diferença de tempo entre as implementações é menos significativa, mas ainda favorece a **Heap**. 
-- A **Lista Encadeada** demonstrou ser uma alternativa válida, mas **mais lenta**, devido ao tempo elevado de busca pelo menor elemento a cada iteração.  
-- Para aplicações onde a eficiência é um fator crítico, **a implementação com Heap é claramente a melhor opção**.  
+- A **heap** apresentou um **desempenho superior**, especialmente para grafos maiores.
+- A **lista encadeada** demonstrou ser uma alternativa válida para grafos pequenos, uma vez que, nesses casos, a diferença de tempo entre as implementações é menos significativa.
+- Para aplicações onde a eficiência é um fator crítico, **a implementação com heap é notavelmente a melhor opção**.  
 
-Essa análise demonstra como a escolha da estrutura de dados impacta diretamente no desempenho do algoritmo, reforçando a importância da **fila de prioridade eficiente** no problema de caminhos mais curtos.  
+A análise evidencia como a escolha da estrutura de dados impacta diretamente no desempenho de um mesmo algoritmo.  
 
-----------------
+## Parâmetros de chamada
 
-# `grafo.c` - Implementação da Estrutura de Dados do Grafo
+Os nomes dos arquivos de entrada e saída, respectivamente, devem ser fornecidos na chamada do programa.
 
-Este arquivo implementa a **estrutura do grafo** utilizando uma **lista de adjacências**. Ele é responsável por ler o arquivo de entrada, construir o grafo e fornecer funções de acesso para o algoritmo de Dijkstra.
+**Exemplo**:
 
----
+```none
+./prog grafo_entrada.txt resultado_dijkstra.txt
+```
 
-## **Principais Pontos**  
-- **Estruturas**:  
-  - `Grafo`: Armazena vértices, número de vértices e o ID do vértice de origem.  
-  - `Vertice`: Contém o nome do vértice, número de adjacentes e uma lista encadeada de nós adjacentes.  
+## Entrada
 
-- **Funções Chave**:  
-  - `preencheListaAdj`: Lê o arquivo de entrada e constrói o grafo.  
-  - `getAdjacentes`: Retorna a lista de nós adjacentes de um vértice.  
-  - `destroiListaAdj`: Libera a memória alocada para o grafo.  
+A primeira linha do arquivo de entrada deve ter o nome do nó fonte.
 
-- **Integração**:  
-  - Fornece dados essenciais para o Dijkstra, como vértices adjacentes e pesos das arestas.  
+As proximas |V| linhas indicam os nós da rede. Cada linha começa com o nome do nó e os pesos das arestas para os demais nós.
 
----
+**Obs.**: peso zero ou 'bomba' indica ausência de conexão. Cada linha terá V - 1 distâncias, uma vez que a distância de um nó para si é sempre zero.
 
-## **Decisões Importantes**  
-- Listas de adjacência **sem sentinela** para eficiência.  
-- Arestas com peso zero são **ignoradas**, simplificando a representação.  
+**Exemplo**:
 
-----------------
+```none
+node_0
+node_0, 10, 0, 5, 0
+node_1, 0, 1, 2, 0
+node_2, 0, 0, 0, 4
+node_3, 0, 3, 3, 0
+node_4, 7, 0, 6, 0
+```
 
-# `heap.c` - **Gerenciamento da Fila de Prioridades**
+## Saída
 
-Este arquivo implementa uma **heap binária** para gerenciar a fila de prioridades utilizada no algoritmo de Dijkstra. A heap é otimizada para operações de inserção, remoção e atualização de prioridades, garantindo eficiência no algoritmo.
+A saída do do programa é salva em um arquivo de texto, contendo os caminhos de menor custo dos nós até a fonte, em ordem crescente de custo.
 
----
+```none
+SHORTEST PATH TO node_0: node_0 <- node_0 (Distance: 0.00)
+SHORTEST PATH TO node_3: node_3 <- node_0 (Distance: 5.00)
+SHORTEST PATH TO node_1: node_1 <- node_3 <- node_0 (Distance: 8.00)
+SHORTEST PATH TO node_2: node_2 <- node_3 <- node_0 (Distance: 8.00)
+SHORTEST PATH TO node_4: node_4 <- node_2 <- node_3 <- node_0 (Distance: 12.00)
+```
 
-## **Principais Pontos**  
-- **Estruturas**:  
-  - `Heap`: Armazena um array de nós (`elementos`), um vetor de posições (`posicoes`) e o tamanho atual da heap (`tamAtual`).  
-
-- **Funções Chave**:  
-  - `insereHeap`: Insere um novo nó na heap e corrige sua posição.  
-  - `extraiMenorElemento`: Remove e retorna o nó com menor peso (raiz da heap).  
-  - `atualizaDistanciaEPai`: Atualiza o peso e o pai de um nó, ajustando sua posição na heap.  
-
-- **Integração**:  
-  - Fornece uma estrutura eficiente para o Dijkstra gerenciar os nós a serem processados, garantindo operações rápidas de extração e atualização.  
-
----
-
-## **Decisões Importantes**  
-- **Vetor de posições**: Mantém o controle das posições dos nós na heap, permitindo atualizações eficientes.    
-
-----------------
-
-# `linked-list.c` - **Fila de Prioridades com Lista Encadeada**
-
-Este arquivo implementa uma **lista encadeada simples** como fila de prioridades para o algoritmo de Dijkstra. É uma alternativa menos eficiente à heap, porém mais simples de implementar.
-
----
-
-## **Principais Pontos**  
-- **Estruturas**:  
-  - `LinkedList`: Armazena a cabeça da lista (`head`) e seu tamanho (`size`).  
-  - `LLNode`: Nós da lista, contendo um ponteiro para `Node` (dados do vértice) e o próximo nó (`next`).  
-
-- **Funções Chave**:  
-  - `insertValue`: Insere um novo nó no início da lista (`O(1)`).  
-  - `removeMinNode`: Percorre a lista para encontrar e remover o nó com menor peso (`O(n)`).  
-  - `getNodeById`: Busca um nó pelo ID na lista (`O(n)`).  
-
-- **Integração**:  
-  - Fornece a funcionalidade básica de fila de prioridades para o Dijkstra, porém com custo computacional maior na remoção do menor elemento.  
-
----
-
-## **Decisões Importantes**  
-- **Inserção no início**: Garante `O(1)` para inserção, mas exige busca linear (`O(n)`) para extrair o mínimo.  
-- **Sem ordenação**: A lista não mantém os elementos ordenados, o que simplifica a inserção mas penaliza a extração.  
-
-Este módulo é uma **alternativa mais simples** à heap, porém recomendado apenas para grafos pequenos devido ao alto custo de operações.
-
-----------------
-
-# `node.c` - **Gerenciamento de Nós**
-
-Este arquivo define a estrutura básica de um **nó** (`Node`), utilizado para representar vértices e suas conexões no grafo. Ele fornece funções para criação, manipulação e destruição de nós.
-
----
-
-## **Principais Pontos**  
-- **Estrutura**:  
-  - `Node`: Armazena o ID do vértice (`id`), o peso da aresta (`peso`) e um ponteiro para o próximo nó (`prox`).  
-
-- **Funções Chave**:  
-  - `criaNode`: Cria um novo nó com ID, peso e próximo nó especificados.  
-  - `destroiNode`: Libera a memória alocada para o nó.  
-
-- **Integração**:  
-  - Utilizado em listas de adjacências, heaps e outras estruturas para representar vértices.
-
----
-
-## **Decisões Importantes**  
-- **Simplicidade**: A estrutura é minimalista, focada em armazenar apenas informações essenciais.  
-- **Reutilização**: O nó é usado em múltiplos contextos (listas, heaps, etc.), garantindo consistência no projeto.  
-
-----------------
-
-# Execução do Programa
+## Execução do Programa
 
 Para **compilar e rodar** o programa:
 
