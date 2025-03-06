@@ -1,9 +1,9 @@
 # Implementação do Algoritmo de Dijkstra com Heap Binária e Lista Encadeada
 
-## Índice 📚
+## Índice
 
 - [Implementação do Algoritmo de Dijkstra com Heap Binária e Lista Encadeada](#implementação-do-algoritmo-de-dijkstra-com-heap-binária-e-lista-encadeada)
-  - [Índice 📚](#índice-)
+  - [Índice](#índice)
   - [Introdução](#introdução)
   - [Arquivos e Suas Funcionalidades](#arquivos-e-suas-funcionalidades)
     - [`node.c`](#nodec)
