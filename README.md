@@ -1,4 +1,4 @@
-# Implementação do Algoritmo de Dijkstra com Heap Binária
+# Implementação do Algoritmo de Dijkstra
 
 ## Introdução
 
