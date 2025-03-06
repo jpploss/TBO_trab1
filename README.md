@@ -236,7 +236,7 @@ node_4, 7, 0, 6, 0
 
 ## Saída
 
-A saída do programa é salva em um arquivo contendo os caminhos de menor custo do nó fonte até os demais. As caminhos são exibidos em ordem crescente de custo.
+A saída do programa é salva em um arquivo contendo os caminhos de menor custo do nó fonte até os demais. Os caminhos são exibidos em ordem crescente de custo.
 
 ```none
 SHORTEST PATH TO node_0: node_0 <- node_0 (Distance: 0.00)
