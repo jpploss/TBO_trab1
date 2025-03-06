@@ -207,7 +207,7 @@ A análise evidencia como a escolha da estrutura de dados impacta diretamente no
 
 ## Parâmetros de chamada
 
-Os nomes dos arquivos de entrada e saída, respectivamente, devem ser fornecidos na chamada do programa.
+Os nomes dos arquivos de texto de entrada e saída, respectivamente, devem ser fornecidos na chamada do programa.
 
 **Exemplo**:
 
@@ -236,7 +236,7 @@ node_4, 7, 0, 6, 0
 
 ## Saída
 
-A saída do do programa é salva em um arquivo de texto, contendo os caminhos de menor custo dos nós até a fonte, em ordem crescente de custo.
+A saída do programa é salva em um arquivo contendo os caminhos de menor custo do nó fonte até os demais. As caminhos são exibidos em ordem crescente de custo.
 
 ```none
 SHORTEST PATH TO node_0: node_0 <- node_0 (Distance: 0.00)
