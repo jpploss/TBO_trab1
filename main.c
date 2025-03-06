@@ -17,7 +17,7 @@ int comparaNode(const void* n1, const void* n2) {
     return 0;
 }
 
-Node** dijkstra(Grafo* grafo); // assinatura de uma função externa que deverá ser linkada durante a compilação
+extern Node** dijkstra(Grafo* grafo);
 
 int main(int argc, char *argv[]) {
     if(argc != 3) {
