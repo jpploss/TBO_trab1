@@ -1,5 +1,7 @@
 # Implementação do Algoritmo de Dijkstra com Heap Binária e Lista Encadeada
 
+Arthur Tosi (2023100573) | João P. Loss (2023102068) | Theo de Sá (2023101082)
+
 ## Índice
 
 - [Implementação do Algoritmo de Dijkstra com Heap Binária e Lista Encadeada](#implementação-do-algoritmo-de-dijkstra-com-heap-binária-e-lista-encadeada)
