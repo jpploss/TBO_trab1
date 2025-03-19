@@ -33,16 +33,16 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    printf("Lendo arquivo e construindo grafo...\n");
+    // printf("Lendo arquivo e construindo grafo...\n");
     Grafo* grafo = criaListaAdj();
     preencheListaAdj(arqEntrada, grafo);
-    printf("Arquivo lido e grafo construído!\n");
+    // printf("Arquivo lido e grafo construído!\n");
     
     fclose(arqEntrada);
 
-    printf("\nRealizando Dijkstra para encontrar os caminhos mínimos...\n");
+    // printf("\nRealizando Dijkstra para encontrar os caminhos mínimos...\n");
     Node** caminhosMinimos = dijkstra(grafo);
-    printf("Dijkstra feito e caminhos mínimos encontrados!\n");
+    // printf("Dijkstra feito e caminhos mínimos encontrados!\n");
 
     FILE* arqSaida = fopen(argv[2], "w");
     if(!arqSaida) {
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    printf("\nSalvando caminhos em arquivo.\n");
+    // printf("\nSalvando caminhos em arquivo.\n");
     int numVertices = getNumVertices(grafo);
     qsort(caminhosMinimos, numVertices, sizeof(Node*), comparaNode);
     for(int i = 0; i < numVertices; i++) {
@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 
     clock_t fim = clock();
     double tempoTotal = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
-    printf("\nTempo decorrido %f seconds\n", tempoTotal);
+    // printf("\nTempo decorrido %f seconds\n", tempoTotal);
 
     return EXIT_SUCCESS;
 }

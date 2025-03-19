@@ -83,7 +83,7 @@ void preencheListaAdj(FILE* arqEntrada, Grafo* lAdj) {
         }
     }
 
-    printf("n° vértices: %d / n° arestas: %d\n", lAdj->numVertices, countAresta);
+    // printf("n° vértices: %d / n° arestas: %d\n", lAdj->numVertices, countAresta);
 }
 
 float getPesoAresta(Grafo* lAdj, int idPai, int idFilho) {
