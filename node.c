@@ -1,3 +1,4 @@
+// Arthur Tosi (2023100573) | João P. Loss (2023102068) | Theo de Sá (2023101082)
 #include "node.h"
 
 struct _node {
