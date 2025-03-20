@@ -30,6 +30,11 @@ static int direito(int i) {
   return 2 * i + 2;
 }
 
+// Retorna 1 se p1 é menor que p2 ou 0, caso contrário
+static int ehPesoMenor(int p1, int p2) {
+  return p2 == INFINITO || (p1 != INFINITO && p1 < p2);
+}
+
 static int corrigeSubida(Heap* heap, int pos) {
   Node** elementos = heap->elementos;
   int* posicoes = heap->posicoes;
@@ -39,7 +44,7 @@ static int corrigeSubida(Heap* heap, int pos) {
     Node* pai = elementos[paiPos];
     Node* atual = elementos[pos];
 
-    if (!pesoInfinito(pai) && getNodePeso(pai) <= getNodePeso(atual)) break;  // já esta certo
+    if (!ehPesoMenor(getNodePeso(atual), getNodePeso(pai))) break;  // já esta certo
 
     elementos[pos] = pai;
     elementos[paiPos] = atual;
@@ -64,11 +69,11 @@ static int corrigeDescida(Heap* heap, int posicao) {
     int menor = posicao;
 
     // Verifica se o filho esquerdo é menor
-    if (esq < tamAtual && !pesoInfinito(elementos[esq]) && getNodePeso(elementos[esq]) < getNodePeso(elementos[menor]))
+    if (esq < tamAtual && ehPesoMenor(getNodePeso(elementos[esq]), getNodePeso(elementos[menor])))
       menor = esq;
 
     // Verifica se o filho direito é menor
-    if (dir < tamAtual && !pesoInfinito(elementos[dir]) && getNodePeso(elementos[dir]) < getNodePeso(elementos[menor]))
+    if (dir < tamAtual && ehPesoMenor(getNodePeso(elementos[dir]), getNodePeso(elementos[menor])))
       menor = dir;
 
     // O menor é o próprio elemento, sai do loop
@@ -89,12 +94,11 @@ static int corrigeDescida(Heap* heap, int posicao) {
   return posicao;
 }
 
-void atualizaDistanciaEPai(Heap* heap, int idFilho, Node* pai, float novaDistancia) {
+void decresceDistancia(Heap* heap, int idFilho, Node* pai, float novaDistancia) {
   int posFilho = heap->posicoes[idFilho];
   setNodePeso(heap->elementos[posFilho], novaDistancia);
   setNodeProx(heap->elementos[posFilho], pai);
 
-  corrigeDescida(heap, posFilho);
   corrigeSubida(heap, posFilho);
 }
 

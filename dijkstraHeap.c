@@ -11,7 +11,7 @@ static void relax(Node* pai, int idFilho, float pesoAresta, Heap* heap) {
     float novoPesoFilho = pesoPai + pesoAresta;
 
     if(pesoFilhoHeap == INFINITO || pesoFilhoHeap > novoPesoFilho) {
-        atualizaDistanciaEPai(heap, idFilho, pai, novoPesoFilho);
+        decresceDistancia(heap, idFilho, pai, novoPesoFilho);
     }
 }
 
@@ -36,7 +36,6 @@ Node** dijkstra(Grafo* grafo) {
         int idMin = getNodeId(min);
         
         caminhosMinimos[idMin] = min;
-        int numAdjacentes = getNumAdjacentes(grafo, min);
         Node* adjacentesMin = getAdjacentes(grafo, min);
         for(Node* n = adjacentesMin; n != NULL; n = getNodeProx(n)) {
             int idN = getNodeId(n);

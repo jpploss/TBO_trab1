@@ -26,7 +26,7 @@ void insereHeap(Heap* heap, int idVertice, float distancia, Node* pai);
 /// @param idFilho id do nó válido a ser atualizado
 /// @param pai novo nó pai
 /// @param novaDistancia nova distância do nó de entrada
-void atualizaDistanciaEPai(Heap* heap, int idFilho, Node* pai, float novaDistancia);
+void decresceDistancia(Heap* heap, int idFilho, Node* pai, float novaDistancia);
 
 /// @brief Extrai o menor elemento da heap.
 /// @param heap heap onde será extraído o menor elemento

@@ -8,7 +8,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/prog",
-            "args": ["caso_teste_pequeno_1.txt", "saida2.txt"],
+            "args": ["./casos_teste_v3/caso_teste_muito_pequeno_2.txt", "saidaDebug.txt"],
             "stopAtEntry": false,
             "externalConsole": false,
             "cwd": "${workspaceFolder}",
