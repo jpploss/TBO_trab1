@@ -22,7 +22,9 @@ Heap* criaHeap(int numVertices);
 /// @param pai ponteiro para o pai do vértice de id igual a 'idVertice'
 void insereHeap(Heap* heap, int idVertice, float distancia, Node* pai);
 
-/// @brief Atualiza o peso e o pai do nó cujo id foi passado como argumento ('idFilho') mantendo a ordem heap.
+/// @brief Decresce o peso e atualiza o pai do nó cujo id foi passado como argumento ('idFilho') mantendo a ordem heap.
+///
+/// Obs.: a função assume que a nova distância é menor que o peso atual do nó.
 /// @param heap heap válida contendo o nó
 /// @param idFilho id do nó válido a ser atualizado
 /// @param pai novo nó pai

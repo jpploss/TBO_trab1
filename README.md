@@ -83,7 +83,7 @@ Para otimizar operações de busca optou-se por armazenar um vetor de posições
 
 - `insereHeap`: Insere um novo nó na heap e corrige sua posição.  
 - `extraiMenorElemento`: Remove e retorna o nó com menor peso (raiz da heap).  
-- `atualizaDistanciaEPai`: Atualiza o peso e o pai de um nó, ajustando sua posição na heap.
+- `decresceDistancia`: Decresce o peso e atualiza o pai de um nó, ajustando sua posição na heap.
 
 ---
 
